@@ -18,6 +18,11 @@ yarn-error.log*
 
 # env files
 .env*
+!.env.example
+
+# database
+*.sqlite
+*.sqlite-journal
 
 # vercel
 .vercel
