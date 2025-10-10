@@ -24,32 +24,48 @@
 
 ## About
 
-Prompting Is All You Need is an interactive pixel-based pong game that features a self-playing animation where a ball bounces around the screen, hitting pixel text and paddles. The game showcases dynamic animations and responsive design, creating an engaging visual experience.
+Prompting Is All You Need is an interactive pixel-based pong game that now features both single-player and real-time multiplayer modes! Watch the self-playing animation or compete with friends in real-time multiplayer matches where up to 4 players can control different paddles simultaneously.
 
 ## How to Use
 
-- Simply load the page to watch the animation play automatically
-- The ball will bounce around the screen, hitting the pixel text and paddles
-- The paddles will automatically track and follow the ball
-- The pixels change color when hit by the ball
-- Responsive design adapts to different screen sizes
+### Single Player Mode
+- Select "Single Player" from the main menu
+- Watch the animation play automatically
+- The ball bounces around, hitting pixel text and paddles
+- Paddles automatically track and follow the ball
+
+### Multiplayer Mode
+- Select "Multiplayer" from the main menu
+- **Create a Room**: Start a new game and share the room code with friends
+- **Join a Room**: Enter a room code to join an existing game
+- Each player controls one paddle (Left, Right, Top, or Bottom)
+- Move your mouse to control your paddle
+- Up to 4 players can play simultaneously
+- Host starts the game when ready
 
 ## Tech
 
-- React & Next.js
+- React & Next.js 15
 - Canvas API for rendering
+- Socket.IO for real-time multiplayer synchronization
+- Custom Node.js server for WebSocket connections
 - Dynamic animation with requestAnimationFrame
 - Responsive design that adapts to viewport size
 - Pixel-based text rendering
+- shadcn/ui components for modern UI
 
 ## Features
 
-- Self-playing pong game
-- Pixel text that reacts to ball collisions
-- Automatic paddle movement
-- Responsive design that works on all screen sizes
-- Smooth animations with collision detection
-- Minimalist black and white aesthetic
+- **Single Player & Multiplayer Modes**: Choose between watching an AI-controlled game or playing with friends
+- **Real-time Multiplayer**: Up to 4 players can control different paddles simultaneously
+- **Room System**: Create and join game rooms with unique codes
+- **Synchronized Game State**: Ball physics and paddle movements sync across all players
+- **Pixel Text Reactions**: Pixels change color when hit by the ball
+- **Responsive Design**: Works on all screen sizes
+- **Smooth Animations**: Collision detection and fluid gameplay
+- **Modern UI**: Clean, minimalist black and white aesthetic with elegant lobby system
+- **Player Management**: See who's in your room and which paddle they control
+- **Toast Notifications**: Real-time feedback for game events
 
 ## Author
 
