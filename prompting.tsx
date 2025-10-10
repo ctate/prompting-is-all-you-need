@@ -1,12 +1,8 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useTheme } from "next-themes"
 
-const COLOR = "#FFFFFF"
-const HIT_COLOR = "#333333"
-const BACKGROUND_COLOR = "#000000"
-const BALL_COLOR = "#FFFFFF"
-const PADDLE_COLOR = "#FFFFFF"
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
 
@@ -148,6 +144,7 @@ export function PromptingIsAllYouNeed() {
   const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0 })
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
+  const { theme, resolvedTheme } = useTheme()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -375,6 +372,16 @@ export function PromptingIsAllYouNeed() {
     const drawGame = () => {
       if (!ctx) return
 
+      // Determine if we're in dark mode
+      const isDark = resolvedTheme === 'dark'
+      
+      // Theme-aware colors
+      const BACKGROUND_COLOR = isDark ? "#000000" : "#FFFFFF"
+      const COLOR = isDark ? "#FFFFFF" : "#000000"
+      const HIT_COLOR = isDark ? "#333333" : "#CCCCCC"
+      const BALL_COLOR = isDark ? "#FFFFFF" : "#000000"
+      const PADDLE_COLOR = isDark ? "#FFFFFF" : "#000000"
+
       ctx.fillStyle = BACKGROUND_COLOR
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -407,7 +414,7 @@ export function PromptingIsAllYouNeed() {
     return () => {
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [])
+  }, [resolvedTheme])
 
   return (
     <canvas
