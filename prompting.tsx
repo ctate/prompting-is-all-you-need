@@ -2,13 +2,41 @@
 
 import { useEffect, useRef } from "react"
 
-const COLOR = "#FFFFFF"
-const HIT_COLOR = "#333333"
-const BACKGROUND_COLOR = "#000000"
-const BALL_COLOR = "#FFFFFF"
-const PADDLE_COLOR = "#FFFFFF"
+// Colors will be set dynamically based on theme
+let COLOR = "#FFFFFF"
+let HIT_COLOR = "#333333"
+let BACKGROUND_COLOR = "#000000"
+let BALL_COLOR = "#FFFFFF"
+let PADDLE_COLOR = "#FFFFFF"
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
+
+// Function to get CSS variable values
+const getCSSVariable = (variable: string): string => {
+  if (typeof window === 'undefined') return '#000000'
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(variable)
+    .trim()
+}
+
+// Function to update colors based on current theme
+const updateColors = () => {
+  const isDark = document.documentElement.classList.contains('dark')
+  
+  if (isDark) {
+    COLOR = getCSSVariable('--foreground') || '#FFFFFF'
+    HIT_COLOR = getCSSVariable('--muted-foreground') || '#333333'
+    BACKGROUND_COLOR = getCSSVariable('--background') || '#000000'
+    BALL_COLOR = getCSSVariable('--foreground') || '#FFFFFF'
+    PADDLE_COLOR = getCSSVariable('--foreground') || '#FFFFFF'
+  } else {
+    COLOR = getCSSVariable('--foreground') || '#000000'
+    HIT_COLOR = getCSSVariable('--muted-foreground') || '#666666'
+    BACKGROUND_COLOR = getCSSVariable('--background') || '#FFFFFF'
+    BALL_COLOR = getCSSVariable('--foreground') || '#000000'
+    PADDLE_COLOR = getCSSVariable('--foreground') || '#000000'
+  }
+}
 
 const PIXEL_MAP = {
   P: [
@@ -155,6 +183,9 @@ export function PromptingIsAllYouNeed() {
 
     const ctx = canvas.getContext("2d")
     if (!ctx) return
+
+    // Update colors initially
+    updateColors()
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -400,12 +431,23 @@ export function PromptingIsAllYouNeed() {
       requestAnimationFrame(gameLoop)
     }
 
+    // Theme change observer
+    const themeObserver = new MutationObserver(() => {
+      updateColors()
+    })
+
+    themeObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
+
     resizeCanvas()
     window.addEventListener("resize", resizeCanvas)
     gameLoop()
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      themeObserver.disconnect()
     }
   }, [])
 
