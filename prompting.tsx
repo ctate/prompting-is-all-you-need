@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useAudio } from "./hooks/use-audio"
 
 const COLOR = "#FFFFFF"
 const HIT_COLOR = "#333333"
@@ -148,6 +149,7 @@ export function PromptingIsAllYouNeed() {
   const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0 })
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
+  const { playSound } = useAudio()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -313,9 +315,11 @@ export function PromptingIsAllYouNeed() {
 
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
+        playSound("wall")
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
+        playSound("wall")
       }
 
       paddles.forEach((paddle) => {
@@ -327,6 +331,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
+            playSound("paddle")
           }
         } else {
           if (
@@ -336,6 +341,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
+            playSound("paddle")
           }
         }
       })
@@ -361,6 +367,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
+          playSound("pixel")
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
           if (Math.abs(ball.x - centerX) > Math.abs(ball.y - centerY)) {
