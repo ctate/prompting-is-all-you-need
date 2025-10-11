@@ -148,6 +148,48 @@ export function PromptingIsAllYouNeed() {
   const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0 })
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
+  const audioContextRef = useRef<AudioContext | null>(null)
+
+  // Initialize audio context
+  useEffect(() => {
+    audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)()
+    return () => {
+      audioContextRef.current?.close()
+    }
+  }, [])
+
+  // Sound effect functions
+  const playSound = (frequency: number, duration: number, volume: number = 0.3) => {
+    const audioContext = audioContextRef.current
+    if (!audioContext) return
+
+    const oscillator = audioContext.createOscillator()
+    const gainNode = audioContext.createGain()
+
+    oscillator.connect(gainNode)
+    gainNode.connect(audioContext.destination)
+
+    oscillator.frequency.value = frequency
+    oscillator.type = 'sine'
+
+    gainNode.gain.setValueAtTime(volume, audioContext.currentTime)
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration)
+
+    oscillator.start(audioContext.currentTime)
+    oscillator.stop(audioContext.currentTime + duration)
+  }
+
+  const playPaddleHitSound = () => {
+    playSound(220, 0.1, 0.2) // A3 note
+  }
+
+  const playWallHitSound = () => {
+    playSound(180, 0.08, 0.15) // F#3 note
+  }
+
+  const playPixelHitSound = () => {
+    playSound(440, 0.05, 0.1) // A4 note
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -313,9 +355,11 @@ export function PromptingIsAllYouNeed() {
 
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
+        playWallHitSound()
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
+        playWallHitSound()
       }
 
       paddles.forEach((paddle) => {
@@ -327,6 +371,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
+            playPaddleHitSound()
           }
         } else {
           if (
@@ -336,6 +381,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
+            playPaddleHitSound()
           }
         }
       })
@@ -361,6 +407,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
+          playPixelHitSound()
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
           if (Math.abs(ball.x - centerX) > Math.abs(ball.y - centerY)) {
