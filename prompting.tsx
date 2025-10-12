@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { soundManager } from "./lib/sound"
 
 const COLOR = "#FFFFFF"
 const HIT_COLOR = "#333333"
@@ -313,9 +314,11 @@ export function PromptingIsAllYouNeed() {
 
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
+        soundManager.playWallHit()
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
+        soundManager.playWallHit()
       }
 
       paddles.forEach((paddle) => {
@@ -327,6 +330,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
+            soundManager.playPaddleHit()
           }
         } else {
           if (
@@ -336,6 +340,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
+            soundManager.playPaddleHit()
           }
         }
       })
@@ -361,6 +366,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
+          soundManager.playPixelHit()
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
           if (Math.abs(ball.x - centerX) > Math.abs(ball.y - centerY)) {
