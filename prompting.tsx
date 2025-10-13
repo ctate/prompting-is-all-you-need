@@ -10,6 +10,33 @@ const PADDLE_COLOR = "#FFFFFF"
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
 
+// Sound utility functions
+const createAudioContext = () => {
+  if (typeof window !== "undefined") {
+    return new (window.AudioContext || (window as any).webkitAudioContext)()
+  }
+  return null
+}
+
+const playSound = (audioContext: AudioContext | null, frequency: number, duration: number, type: OscillatorType = "sine") => {
+  if (!audioContext) return
+
+  const oscillator = audioContext.createOscillator()
+  const gainNode = audioContext.createGain()
+
+  oscillator.connect(gainNode)
+  gainNode.connect(audioContext.destination)
+
+  oscillator.frequency.value = frequency
+  oscillator.type = type
+
+  gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
+  gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration)
+
+  oscillator.start(audioContext.currentTime)
+  oscillator.stop(audioContext.currentTime + duration)
+}
+
 const PIXEL_MAP = {
   P: [
     [1, 1, 1, 1],
@@ -148,6 +175,7 @@ export function PromptingIsAllYouNeed() {
   const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0 })
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
+  const audioContextRef = useRef<AudioContext | null>(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -155,6 +183,9 @@ export function PromptingIsAllYouNeed() {
 
     const ctx = canvas.getContext("2d")
     if (!ctx) return
+
+    // Initialize audio context
+    audioContextRef.current = createAudioContext()
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -311,11 +342,14 @@ export function PromptingIsAllYouNeed() {
       ball.x += ball.dx
       ball.y += ball.dy
 
+      // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
+        playSound(audioContextRef.current, 220, 0.1, "triangle") // Wall bounce sound
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
+        playSound(audioContextRef.current, 220, 0.1, "triangle") // Wall bounce sound
       }
 
       paddles.forEach((paddle) => {
@@ -327,6 +361,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
+            playSound(audioContextRef.current, 330, 0.15, "square") // Paddle hit sound
           }
         } else {
           if (
@@ -336,6 +371,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
+            playSound(audioContextRef.current, 330, 0.15, "square") // Paddle hit sound
           }
         }
       })
@@ -361,6 +397,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
+          playSound(audioContextRef.current, 440, 0.08, "sine") // Pixel hit sound
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
           if (Math.abs(ball.x - centerX) > Math.abs(ball.y - centerY)) {
