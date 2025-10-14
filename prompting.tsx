@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTheme } from "next-themes"
+import { SoundToggle } from "@/components/sound-toggle"
 
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
@@ -14,8 +15,8 @@ const createAudioContext = () => {
   return null
 }
 
-const playSound = (audioContext: AudioContext | null, frequency: number, duration: number, type: OscillatorType = "sine") => {
-  if (!audioContext) return
+const playSound = (audioContext: AudioContext | null, frequency: number, duration: number, type: OscillatorType = "sine", isMuted: boolean = false) => {
+  if (!audioContext || isMuted) return
 
   const oscillator = audioContext.createOscillator()
   const gainNode = audioContext.createGain()
@@ -174,6 +175,8 @@ export function PromptingIsAllYouNeed() {
   const audioContextRef = useRef<AudioContext | null>(null)
   const animationFrameRef = useRef<number | null>(null)
   const { theme } = useTheme()
+  const [isMuted, setIsMuted] = useState(true) // Muted by default
+  const isMutedRef = useRef(true) // Keep mute state in ref for animation loop
 
   // Color scheme based on theme stored in refs so they update without restarting animation
   const colorsRef = useRef({
@@ -195,6 +198,15 @@ export function PromptingIsAllYouNeed() {
       PADDLE_COLOR: isDark ? "#FFFFFF" : "#000000",
     }
   }, [theme])
+
+  // Update muted ref when state changes
+  useEffect(() => {
+    isMutedRef.current = isMuted
+  }, [isMuted])
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted)
+  }
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -364,11 +376,11 @@ export function PromptingIsAllYouNeed() {
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
-        playSound(audioContextRef.current, 220, 0.1, "triangle") // Wall bounce sound
+        playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
-        playSound(audioContextRef.current, 220, 0.1, "triangle") // Wall bounce sound
+        playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
 
       paddles.forEach((paddle) => {
@@ -380,7 +392,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
-            playSound(audioContextRef.current, 330, 0.15, "square") // Paddle hit sound
+            playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         } else {
           if (
@@ -390,7 +402,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
-            playSound(audioContextRef.current, 330, 0.15, "square") // Paddle hit sound
+            playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         }
       })
@@ -416,7 +428,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
-          playSound(audioContextRef.current, 440, 0.08, "sine") // Pixel hit sound
+          playSound(audioContextRef.current, 440, 0.08, "sine", isMutedRef.current) // Pixel hit sound
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
           if (Math.abs(ball.x - centerX) > Math.abs(ball.y - centerY)) {
@@ -470,11 +482,14 @@ export function PromptingIsAllYouNeed() {
   }, [])
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full"
-      aria-label="Prompting Is All You Need: Fullscreen Pong game with pixel text"
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="fixed top-0 left-0 w-full h-full"
+        aria-label="Prompting Is All You Need: Fullscreen Pong game with pixel text"
+      />
+      <SoundToggle isMuted={isMuted} onToggle={toggleMute} />
+    </>
   )
 }
 
