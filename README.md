@@ -20,51 +20,51 @@
   </p>
   
   <p align="center">
-    <a href="#-about">About</a> •
-    <a href="#-features">Features</a> •
-    <a href="#-tech-stack">Tech Stack</a> •
-    <a href="#-installation">Installation</a> •
-    <a href="#-usage">Usage</a> •
-    <a href="#-development">Development</a> •
-    <a href="#-contributing">Contributing</a>
+    <a href="#about">About</a> •
+    <a href="#features">Features</a> •
+    <a href="#tech-stack">Tech Stack</a> •
+    <a href="#installation">Installation</a> •
+    <a href="#usage">Usage</a> •
+    <a href="#development">Development</a> •
+    <a href="#contributing">Contributing</a>
   </p>
 </div>
 
 ---
 
-## 📖 About
+## About
 
 **Prompting Is All You Need** is an innovative interactive experience that combines the classic Pong game with dynamic pixel art text rendering. The game features a self-playing animation where a ball bounces around the screen, colliding with pixelated text and intelligent paddles that automatically track the ball's movement.
 
 ### Key Highlights
-- 🎮 **Self-Playing Game**: Watch as the game plays itself with intelligent paddle AI
-- 🎨 **Pixel Art Text**: "PROMPTING IS ALL YOU NEED" rendered in beautiful pixel art
-- 🔊 **Audio Feedback**: Procedural sound effects for collisions and interactions
-- 📱 **Responsive Design**: Adapts seamlessly to any screen size
-- ⚡ **Smooth Performance**: 60fps animations using Canvas API and requestAnimationFrame
+- **Self-Playing Game**: Watch as the game plays itself with intelligent paddle AI
+- **Pixel Art Text**: "PROMPTING IS ALL YOU NEED" rendered in beautiful pixel art
+- **Audio Feedback**: Procedural sound effects for collisions and interactions
+- **Responsive Design**: Adapts seamlessly to any screen size
+- **Smooth Performance**: 60fps animations using Canvas API and requestAnimationFrame
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎯 Core Gameplay
+### Core Gameplay
 - **Intelligent Paddle AI**: Four paddles automatically track and follow the ball
 - **Dynamic Collision System**: Ball bounces off walls, paddles, and pixel text
 - **Pixel Text Interaction**: Individual pixels change color when hit by the ball
 - **Real-time Physics**: Smooth ball movement with realistic collision detection
 
-### 🎨 Visual Design
+### Visual Design
 - **Pixel Art Rendering**: Custom pixel font system for text display
 - **Minimalist Aesthetic**: Clean black and white design with subtle animations
 - **Responsive Scaling**: Text and game elements scale based on viewport size
 - **Smooth Animations**: 60fps rendering with optimized Canvas operations
 
-### 🔊 Audio Experience
+### Audio Experience
 - **Procedural Sound Effects**: Different tones for different collision types
 - **Web Audio API**: Real-time sound generation using oscillators
 - **Collision Feedback**: Audio cues for wall bounces, paddle hits, and pixel collisions
 
-### 🛠️ Technical Features
+### Technical Features
 - **TypeScript**: Full type safety throughout the codebase
 - **React Hooks**: Modern React patterns with useRef and useEffect
 - **Canvas API**: High-performance 2D rendering
@@ -72,7 +72,7 @@
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 - Node.js 18+ 
@@ -115,7 +115,7 @@ pnpm start
 
 ---
 
-## 🎮 Usage
+## Usage
 
 The game starts automatically when you load the page. No user interaction is required - simply watch as:
 
@@ -131,7 +131,7 @@ The game starts automatically when you load the page. No user interaction is req
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend Framework
 - **Next.js 15.2.4** - React framework with App Router
@@ -160,7 +160,7 @@ The game starts automatically when you load the page. No user interaction is req
 
 ---
 
-## 🧑‍💻 Development
+## Development
 
 ### Project Structure
 ```
@@ -198,21 +198,21 @@ npx tsc --noEmit  # Check TypeScript types
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Here's how you can help:
 
-### 🐛 Bug Reports
+### Bug Reports
 - Use GitHub Issues to report bugs
 - Include steps to reproduce the issue
 - Provide browser and device information
 
-### 💡 Feature Requests
+### Feature Requests
 - Suggest new features via GitHub Issues
 - Describe the use case and expected behavior
 - Consider implementation complexity
 
-### 🔧 Code Contributions
+### Code Contributions
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
@@ -221,7 +221,7 @@ We welcome contributions! Here's how you can help:
 6. Push to the branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
 
-### 📝 Code Style
+### Code Style
 - Follow existing TypeScript patterns
 - Use meaningful variable and function names
 - Add comments for complex logic
@@ -229,25 +229,25 @@ We welcome contributions! Here's how you can help:
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Chris Tate** - [@ctatedev](https://x.com/ctatedev)
 
-- 🚀 Full-stack developer
-- 🎨 UI/UX enthusiast  
-- 🎮 Game development hobbyist
-- 📱 Mobile-first advocate
+- Full-stack developer
+- UI/UX enthusiast  
+- Game development hobbyist
+- Mobile-first advocate
 
 ---
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
 <div align="center">
-  <p>Made with ❤️ and lots of ☕</p>
+  <p>Made with love and lots of coffee</p>
   <p>
     <a href="https://v0.dev/community/prompting-is-all-you-need-tokU2y8gQ4D">View on v0.dev</a> •
     <a href="https://github.com/your-username/prompting-is-all-you-need">GitHub</a> •
