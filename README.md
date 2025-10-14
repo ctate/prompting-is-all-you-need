@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎮 Prompting Is All You Need
+# Prompting Is All You Need
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.2.4-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
@@ -16,48 +16,48 @@
 
 ---
 
-## 📖 Table of Contents
+## Table of Contents
 
-- [🎯 About](#-about)
-- [✨ Features](#-features)
-- [🚀 Quick Start](#-quick-start)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [🎮 How It Works](#-how-it-works)
-- [📱 Demo](#-demo)
-- [🔧 Development](#-development)
-- [📄 License](#-license)
-- [👨‍💻 Author](#-author)
+- [About](#about)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Tech Stack](#tech-stack)
+- [How It Works](#how-it-works)
+- [Demo](#demo)
+- [Development](#development)
+- [License](#license)
+- [Author](#author)
 
 ---
 
-## 🎯 About
+## About
 
 **Prompting Is All You Need** is an innovative interactive experience that combines the classic Pong game with dynamic pixel art text rendering. Watch as a ball bounces around the screen, colliding with pixelated text that changes color on impact, while AI-controlled paddles track the ball's movement in real-time.
 
 This project demonstrates advanced Canvas API techniques, real-time collision detection, procedural audio generation, and responsive design principles. It's built as a showcase of modern web development capabilities using React, Next.js, and TypeScript.
 
-## ✨ Features
+## Features
 
-### 🎮 Core Gameplay
+### Core Gameplay
 - **Self-Playing Animation**: Fully automated Pong gameplay with intelligent paddle AI
 - **Dynamic Text Collision**: Pixel text that reacts to ball impacts with visual feedback
 - **Real-Time Audio**: Procedural sound effects generated using Web Audio API
 - **Responsive Design**: Adapts seamlessly to any screen size or device
 
-### 🎨 Visual Experience
+### Visual Experience
 - **Pixel Art Rendering**: Custom pixel-based text rendering system
 - **Smooth Animations**: 60fps animations using `requestAnimationFrame`
 - **Minimalist Aesthetic**: Clean black and white design with subtle color changes
 - **Fullscreen Canvas**: Immersive full-viewport gaming experience
 
-### 🔧 Technical Features
+### Technical Features
 - **TypeScript**: Fully typed codebase for better development experience
 - **Canvas API**: High-performance 2D rendering
 - **Collision Detection**: Precise pixel-perfect collision system
 - **Audio Synthesis**: Real-time audio generation without external files
 - **Responsive Scaling**: Dynamic scaling based on viewport dimensions
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+ 
@@ -98,7 +98,7 @@ pnpm build
 pnpm start
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Core Framework
 - **[Next.js 15.2.4](https://nextjs.org/)** - React framework with App Router
@@ -121,7 +121,7 @@ pnpm start
 - **React Hooks** - State management and lifecycle
 - **Class Variance Authority** - Component variant management
 
-## 🎮 How It Works
+## How It Works
 
 ### Game Engine
 The game uses a custom game loop built on `requestAnimationFrame` for smooth 60fps animations:
@@ -143,15 +143,15 @@ The game uses a custom game loop built on `requestAnimationFrame` for smooth 60f
 - **Boundary Constraints**: Paddles stay within screen bounds
 - **Multi-Directional**: Supports both vertical and horizontal paddles
 
-## 📱 Demo
+## Demo
 
 ### Live Demo
-🎮 **[Play the game live](https://prompting-is-all-you-need.vercel.app)**
+**[Play the game live](https://prompting-is-all-you-need.vercel.app)**
 
 ### Screenshots
 *The game features a minimalist design with pixel text that reacts to ball collisions*
 
-## 🔧 Development
+## Development
 
 ### Project Structure
 ```
@@ -180,11 +180,11 @@ The game uses a custom game loop built on `requestAnimationFrame` for smooth 60f
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 👨‍💻 Author
+## Author
 
 **Chris Tate** - [@ctatedev](https://x.com/ctatedev)
 
@@ -192,7 +192,7 @@ This project is open source and available under the [MIT License](LICENSE).
 
 <div align="center">
 
-**⭐ Star this repository if you found it helpful!**
+**Star this repository if you found it helpful!**
 
 [![GitHub stars](https://img.shields.io/github/stars/your-username/prompting-is-all-you-need?style=social)](https://github.com/your-username/prompting-is-all-you-need)
 [![GitHub forks](https://img.shields.io/github/forks/your-username/prompting-is-all-you-need?style=social)](https://github.com/your-username/prompting-is-all-you-need/fork)
