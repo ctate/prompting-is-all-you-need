@@ -27,13 +27,13 @@
 </p>
 <br/>
 
-## 📖 About
+## About
 
 **Prompting Is All You Need** is a mesmerizing self-playing pong animation that combines nostalgic arcade aesthetics with modern web technologies. The project features a bouncing ball that interacts with pixel-rendered text displaying "PROMPTING IS ALL YOU NEED", complete with automatic paddle tracking and retro sound effects powered by the Web Audio API.
 
 This project showcases the power of creative prompting and demonstrates how simple concepts can create engaging visual experiences through code.
 
-## 🎮 Demo
+## Demo
 
 Simply load the page and watch the magic happen! The animation runs automatically with:
 - **Automatic Ball Movement**: Bounces continuously around the screen
@@ -42,28 +42,28 @@ Simply load the page and watch the magic happen! The animation runs automaticall
 - **Retro Sound Effects**: 8-bit style audio feedback for collisions
 - **Fully Responsive**: Adapts seamlessly to any screen size
 
-## ✨ Features
+## Features
 
 ### Visual Effects
-- 🎨 **Pixel-Perfect Text Rendering**: Custom pixel art font system for "PROMPTING IS ALL YOU NEED"
-- 🌓 **Dynamic Color Changes**: Pixels transition from white to grey when hit by the ball
-- 🎯 **Smooth Ball Physics**: Realistic collision detection and bounce mechanics
-- 📐 **Responsive Scaling**: Automatically adjusts to viewport dimensions
+- **Pixel-Perfect Text Rendering**: Custom pixel art font system for "PROMPTING IS ALL YOU NEED"
+- **Dynamic Color Changes**: Pixels transition from white to grey when hit by the ball
+- **Smooth Ball Physics**: Realistic collision detection and bounce mechanics
+- **Responsive Scaling**: Automatically adjusts to viewport dimensions
 
 ### Game Mechanics
-- 🏓 **Four-Way Paddle System**: Vertical and horizontal paddles on all screen edges
-- 🤖 **AI Paddle Tracking**: Smooth, predictive paddle movement that follows the ball
-- ⚡ **Real-time Physics**: Collision detection with walls, paddles, and individual pixels
-- 🔄 **Perpetual Motion**: Endless animation loop with no manual interaction needed
+- **Four-Way Paddle System**: Vertical and horizontal paddles on all screen edges
+- **AI Paddle Tracking**: Smooth, predictive paddle movement that follows the ball
+- **Real-time Physics**: Collision detection with walls, paddles, and individual pixels
+- **Perpetual Motion**: Endless animation loop with no manual interaction needed
 
 ### Technical Excellence
-- 🎵 **Web Audio Integration**: Dynamic sound synthesis for collisions (3 different sound types)
-- 🖼️ **Canvas API**: High-performance rendering using native canvas operations
-- 📱 **Mobile-Friendly**: Touch-screen compatible and fully responsive
-- ♿ **Accessibility**: Proper ARIA labels for screen readers
-- 🎭 **Minimalist Design**: Clean black and white aesthetic
+- **Web Audio Integration**: Dynamic sound synthesis for collisions (3 different sound types)
+- **Canvas API**: High-performance rendering using native canvas operations
+- **Mobile-Friendly**: Touch-screen compatible and fully responsive
+- **Accessibility**: Proper ARIA labels for screen readers
+- **Minimalist Design**: Clean black and white aesthetic
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+ and pnpm (or npm/yarn)
@@ -97,7 +97,7 @@ pnpm build
 pnpm start
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Core Framework
 - **[Next.js 15.2.4](https://nextjs.org/)** - React framework with App Router
@@ -121,7 +121,7 @@ pnpm start
 - **[date-fns](https://date-fns.org/)** - Modern date utility library
 - **[Recharts](https://recharts.org/)** - Composable charting library
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 my-v0-project/
@@ -134,7 +134,7 @@ my-v0-project/
 │   └── theme-provider.tsx   # Theme context
 ├── lib/                     # Utility functions
 │   └── utils.ts            # Helper functions
-├── prompting.tsx           # Main game component ⭐
+├── prompting.tsx           # Main game component
 ├── public/                 # Static assets
 ├── styles/                 # Additional styles
 └── package.json           # Dependencies
@@ -147,7 +147,7 @@ my-v0-project/
 - **`tailwind.config.ts`** - Tailwind CSS configuration
 - **`tsconfig.json`** - TypeScript configuration
 
-## 🧠 How It Works
+## How It Works
 
 ### Pixel Text Rendering
 The text is rendered using a custom pixel map system where each letter is defined as a 2D array of 1s and 0s:
@@ -183,7 +183,7 @@ The entire game scales based on viewport size:
 3. Maintains text centering and proper spacing
 4. Recalculates on window resize
 
-## 🎯 Use Cases
+## Use Cases
 
 - **Portfolio Piece**: Showcase creative coding skills
 - **Landing Page**: Eye-catching hero section for websites
@@ -191,7 +191,7 @@ The entire game scales based on viewport size:
 - **Educational Demo**: Teaching canvas API and game physics
 - **Inspiration**: Starting point for similar animation projects
 
-## 📝 Customization
+## Customization
 
 ### Colors
 Edit constants in `prompting.tsx`:
@@ -216,15 +216,15 @@ const BALL_SPEED = 6 * scale  // Ball velocity
 paddle.y += (paddle.targetY - paddle.y) * 0.1 // Paddle smoothing
 ```
 
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues, and feature requests are welcome! Feel free to check the issues page or submit a pull request.
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 👤 Author
+## Author
 
 **Chris Tate**
 - Twitter: [@ctatedev](https://x.com/ctatedev)
@@ -233,7 +233,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ---
 
 <p align="center">
-  <strong>Built with 💙 using v0.dev</strong>
+  <strong>Built with love using v0.dev</strong>
   <br />
   <em>Prompting Is All You Need - Because sometimes, it really is.</em>
 </p>
