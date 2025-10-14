@@ -176,6 +176,7 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const animationFrameRef = useRef<number | null>(null)
   const [hasInteracted, setHasInteracted] = useState(false)
 
   useEffect(() => {
@@ -202,7 +203,7 @@ export function PromptingIsAllYouNeed() {
       const BALL_SPEED = 6 * scale
 
       pixelsRef.current = []
-      const words = ["PROMPTING", "IS ALL YOU NEED"]
+      const words = ["PROMPTING"]
 
       const calculateWordWidth = (word: string, pixelSize: number) => {
         return (
@@ -215,74 +216,35 @@ export function PromptingIsAllYouNeed() {
       }
 
       const totalWidthLarge = calculateWordWidth(words[0], LARGE_PIXEL_SIZE)
-      const totalWidthSmall = words[1].split(" ").reduce((width, word, index) => {
-        return width + calculateWordWidth(word, SMALL_PIXEL_SIZE) + (index > 0 ? WORD_SPACING * SMALL_PIXEL_SIZE : 0)
-      }, 0)
-      const totalWidth = Math.max(totalWidthLarge, totalWidthSmall)
+      const totalWidth = totalWidthLarge
       const scaleFactor = (canvas.width * 0.8) / totalWidth
 
       const adjustedLargePixelSize = LARGE_PIXEL_SIZE * scaleFactor
-      const adjustedSmallPixelSize = SMALL_PIXEL_SIZE * scaleFactor
 
       const largeTextHeight = 5 * adjustedLargePixelSize
-      const smallTextHeight = 5 * adjustedSmallPixelSize
-      const spaceBetweenLines = 5 * adjustedLargePixelSize
-      const totalTextHeight = largeTextHeight + spaceBetweenLines + smallTextHeight
+      const totalTextHeight = largeTextHeight
 
       let startY = (canvas.height - totalTextHeight) / 2
 
-      words.forEach((word, wordIndex) => {
-        const pixelSize = wordIndex === 0 ? adjustedLargePixelSize : adjustedSmallPixelSize
-        const totalWidth =
-          wordIndex === 0
-            ? calculateWordWidth(word, adjustedLargePixelSize)
-            : words[1].split(" ").reduce((width, w, index) => {
-                return (
-                  width +
-                  calculateWordWidth(w, adjustedSmallPixelSize) +
-                  (index > 0 ? WORD_SPACING * adjustedSmallPixelSize : 0)
-                )
-              }, 0)
+      const word = words[0]
+      const pixelSize = adjustedLargePixelSize
+      const totalWidth = calculateWordWidth(word, adjustedLargePixelSize)
+      let startX = (canvas.width - totalWidth) / 2
 
-        let startX = (canvas.width - totalWidth) / 2
+      word.split("").forEach((letter) => {
+        const pixelMap = PIXEL_MAP[letter as keyof typeof PIXEL_MAP]
+        if (!pixelMap) return
 
-        if (wordIndex === 1) {
-          word.split(" ").forEach((subWord) => {
-            subWord.split("").forEach((letter) => {
-              const pixelMap = PIXEL_MAP[letter as keyof typeof PIXEL_MAP]
-              if (!pixelMap) return
-
-              for (let i = 0; i < pixelMap.length; i++) {
-                for (let j = 0; j < pixelMap[i].length; j++) {
-                  if (pixelMap[i][j]) {
-                    const x = startX + j * pixelSize
-                    const y = startY + i * pixelSize
-                    pixelsRef.current.push({ x, y, size: pixelSize, hit: false })
-                  }
-                }
-              }
-              startX += (pixelMap[0].length + LETTER_SPACING) * pixelSize
-            })
-            startX += WORD_SPACING * adjustedSmallPixelSize
-          })
-        } else {
-          word.split("").forEach((letter) => {
-            const pixelMap = PIXEL_MAP[letter as keyof typeof PIXEL_MAP]
-            if (!pixelMap) return
-
-            for (let i = 0; i < pixelMap.length; i++) {
-              for (let j = 0; j < pixelMap[i].length; j++) {
-                if (pixelMap[i][j]) {
-                  const x = startX + j * pixelSize
-                  const y = startY + i * pixelSize
-                  pixelsRef.current.push({ x, y, size: pixelSize, hit: false })
-                }
-              }
+        for (let i = 0; i < pixelMap.length; i++) {
+          for (let j = 0; j < pixelMap[i].length; j++) {
+            if (pixelMap[i][j]) {
+              const x = startX + j * pixelSize
+              const y = startY + i * pixelSize
+              pixelsRef.current.push({ x, y, size: pixelSize, hit: false })
             }
-            startX += (pixelMap[0].length + LETTER_SPACING) * pixelSize
-          })
+          }
         }
-        startY += wordIndex === 0 ? largeTextHeight + spaceBetweenLines : 0
+        startX += (pixelMap[0].length + LETTER_SPACING) * pixelSize
       })
 
       // Initialize ball position near the top right corner
@@ -292,8 +254,8 @@ export function PromptingIsAllYouNeed() {
       ballRef.current = {
         x: ballStartX,
         y: ballStartY,
-        dx: -BALL_SPEED,
-        dy: BALL_SPEED,
+        dx: hasInteracted ? -BALL_SPEED : 0,
+        dy: hasInteracted ? BALL_SPEED : 0,
         radius: adjustedLargePixelSize / 2,
       }
 
@@ -433,9 +395,11 @@ export function PromptingIsAllYouNeed() {
     }
 
     const gameLoop = () => {
-      updateGame()
+      if (hasInteracted) {
+        updateGame()
+      }
       drawGame()
-      requestAnimationFrame(gameLoop)
+      animationFrameRef.current = requestAnimationFrame(gameLoop)
     }
 
     resizeCanvas()
@@ -444,14 +408,24 @@ export function PromptingIsAllYouNeed() {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
     }
-  }, [])
+  }, [hasInteracted])
 
   const handleStartClick = () => {
     // Resume audio context on user interaction
     if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
       audioContextRef.current.resume()
     }
+    
+    // Start ball movement
+    const scale = scaleRef.current
+    const BALL_SPEED = 6 * scale
+    ballRef.current.dx = -BALL_SPEED
+    ballRef.current.dy = BALL_SPEED
+    
     setHasInteracted(true)
   }
 
@@ -468,16 +442,10 @@ export function PromptingIsAllYouNeed() {
           onClick={handleStartClick}
           role="button"
           tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleStartClick()
-            }
-          }}
           aria-label="Click to start"
         >
           <div className="text-white text-center">
-            <div className="text-4xl font-bold mb-4 animate-pulse">Click to Start</div>
-            <div className="text-sm opacity-70">Click anywhere to begin</div>
+            <div className="text-4xl font-bold animate-pulse">Click to Start</div>
           </div>
         </div>
       )}
