@@ -315,15 +315,19 @@ export function PromptingIsAllYouNeed() {
         startY += wordIndex === 0 ? largeTextHeight + spaceBetweenLines : 0
       })
 
-      // Initialize ball position near the top right corner
-      const ballStartX = canvas.width * 0.9
-      const ballStartY = canvas.height * 0.1
+      // Initialize ball position randomly with random direction
+      const ballStartX = canvas.width * (0.2 + Math.random() * 0.6) // Random x between 20% and 80%
+      const ballStartY = canvas.height * (0.2 + Math.random() * 0.6) // Random y between 20% and 80%
+      
+      // Random direction for dx and dy
+      const randomDx = (Math.random() < 0.5 ? -1 : 1) * BALL_SPEED
+      const randomDy = (Math.random() < 0.5 ? -1 : 1) * BALL_SPEED
 
       ballRef.current = {
         x: ballStartX,
         y: ballStartY,
-        dx: -BALL_SPEED,
-        dy: BALL_SPEED,
+        dx: randomDx,
+        dy: randomDy,
         radius: adjustedLargePixelSize / 2,
       }
 
