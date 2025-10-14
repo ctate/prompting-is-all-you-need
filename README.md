@@ -3,7 +3,7 @@
     <img alt="Prompting Is All You Need" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/prompting.jpg-wiD8pePizmHSTO1VERzYJixbI9WIX3.jpeg" width="600">
   </a>
   
-  <h1>🎮 Prompting Is All You Need</h1>
+  <h1>Prompting Is All You Need</h1>
   
   <p><strong>An interactive pixel-based Pong game featuring dynamic text collision and Web Audio API sound effects</strong></p>
   
@@ -33,7 +33,7 @@
 
 ---
 
-## 🎯 About
+## About
 
 **Prompting Is All You Need** is an innovative interactive experience that combines classic Pong gameplay with modern web technologies. The game features pixel-perfect text rendering of "PROMPTING IS ALL YOU NEED" that dynamically reacts to ball collisions, creating a mesmerizing visual and auditory experience.
 
@@ -44,7 +44,7 @@
 - **Responsive Design**: Adapts seamlessly to any screen size
 - **Modern Tech Stack**: Built with Next.js 15, React 19, and TypeScript
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 - Node.js 18+ 
@@ -81,7 +81,7 @@ pnpm build
 pnpm start
 ```
 
-## 🎮 Usage
+## Usage
 
 The game starts automatically when you load the page. Here's what you'll experience:
 
@@ -95,7 +95,7 @@ The game starts automatically when you load the page. Here's what you'll experie
 - **No manual controls needed** - the game is fully automated
 - **Resize your browser** to see the responsive design in action
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend Framework
 - **Next.js 15.2.4** - React framework with App Router
@@ -122,34 +122,34 @@ The game starts automatically when you load the page. Here's what you'll experie
 - **PostCSS** - CSS processing
 - **ESLint** - Code linting
 
-## ✨ Features
+## Features
 
-### 🎮 Gameplay
+### Gameplay
 - **Self-Playing Pong**: Fully automated gameplay with intelligent AI
 - **Four-Way Paddles**: Paddles on all four sides that track the ball
 - **Real-time Collision Detection**: Precise pixel-perfect collision system
 - **Dynamic Ball Physics**: Realistic bouncing with speed and direction changes
 
-### 🎨 Visual Effects
+### Visual Effects
 - **Pixel Text Rendering**: Custom font system with individual pixel control
 - **Color-Changing Pixels**: Pixels change from white to gray when hit
 - **Responsive Scaling**: Automatically adapts to any screen size
 - **Smooth Animations**: 60fps rendering with requestAnimationFrame
 - **Minimalist Aesthetic**: Clean black and white design
 
-### 🔊 Audio Experience
+### Audio Experience
 - **Procedural Sound Effects**: Different sounds for different collision types
 - **Web Audio Integration**: Real-time audio generation
 - **Collision Feedback**: Audio cues for wall bounces, paddle hits, and pixel impacts
 - **Frequency Variation**: Different tones for different interactions
 
-### 📱 Responsive Design
+### Responsive Design
 - **Viewport Adaptation**: Scales perfectly on desktop, tablet, and mobile
 - **Dynamic Sizing**: Text and paddles resize based on screen dimensions
 - **Touch-Friendly**: Works seamlessly on touch devices
 - **Cross-Browser Support**: Compatible with all modern browsers
 
-## 🏗️ Technical Architecture
+## Technical Architecture
 
 ### Core Components
 
@@ -190,18 +190,18 @@ The game starts automatically when you load the page. Here's what you'll experie
 └── public/               # Static assets
 ```
 
-## 👨‍💻 Author
+## Author
 
 **Chris Tate** - Full-Stack Developer & Creative Technologist
 
-- 🐦 [@ctatedev](https://x.com/ctatedev) on Twitter
-- 💼 [Portfolio](https://ctatedev.com) (if available)
-- 🚀 Built with [v0.dev](https://v0.dev)
+- [@ctatedev](https://x.com/ctatedev) on Twitter
+- [Portfolio](https://ctatedev.com) (if available)
+- Built with [v0.dev](https://v0.dev)
 
 ---
 
 <div align="center">
-  <p>Made with ❤️ using Next.js, React, and Canvas API</p>
+  <p>Made with Next.js, React, and Canvas API</p>
   <p>
     <a href="https://v0.dev/community/prompting-is-all-you-need-tokU2y8gQ4D">View on v0.dev</a> •
     <a href="#-installation">Get Started</a> •
