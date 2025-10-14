@@ -244,6 +244,16 @@ We welcome contributions! Here's how you can help:
 
 This project is open source and available under the [MIT License](LICENSE).
 
+### What this means:
+- **Commercial use**: You can use this project in commercial applications
+- **Modification**: You can modify the code for your needs
+- **Distribution**: You can distribute the original or modified code
+- **Private use**: You can use it privately
+- **Attribution**: You must include the original copyright notice
+
+### Quick Summary:
+The MIT License is a permissive license that allows you to do almost anything with the code, as long as you include the original copyright notice. It's one of the most popular open source licenses.
+
 ---
 
 <div align="center">
