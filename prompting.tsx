@@ -175,6 +175,7 @@ export function PromptingIsAllYouNeed() {
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
   const animationFrameRef = useRef<number | null>(null)
+  const bgHueRef = useRef(0) // Background hue for color cycling
   const { theme } = useTheme()
   const [isMuted, setIsMuted] = useState(true) // Muted by default
   const isMutedRef = useRef(true) // Keep mute state in ref for animation loop
@@ -381,6 +382,9 @@ export function PromptingIsAllYouNeed() {
       
       // Update ball color - cycle through hue
       ball.hue = (ball.hue + 1) % 360
+      
+      // Update background color - cycle through hue slowly
+      bgHueRef.current = (bgHueRef.current + 0.5) % 360
 
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
@@ -453,7 +457,10 @@ export function PromptingIsAllYouNeed() {
       if (!ctx) return
 
       const colors = colorsRef.current
-      ctx.fillStyle = colors.BACKGROUND_COLOR
+      const isDark = theme === "dark"
+      
+      // Draw background with color cycling
+      ctx.fillStyle = `hsl(${bgHueRef.current}, 70%, ${isDark ? '10%' : '90%'})`
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       pixelsRef.current.forEach((pixel) => {
@@ -463,8 +470,7 @@ export function PromptingIsAllYouNeed() {
 
       // Draw ball with rainbow color cycling
       const ball = ballRef.current
-      const isDark = theme === "dark"
-      ctx.fillStyle = `hsl(${ball.hue}, 100%, ${isDark ? '50%' : '50%'})`
+      ctx.fillStyle = `hsl(${ball.hue}, 100%, 50%)`
       ctx.beginPath()
       ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2)
       ctx.fill()
