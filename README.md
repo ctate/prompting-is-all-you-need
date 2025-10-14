@@ -1,7 +1,7 @@
 <div align="center">
   <img alt="Prompting Is All You Need" src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/prompting.jpg-wiD8pePizmHSTO1VERzYJixbI9WIX3.jpeg" width="600">
   
-  # 🎮 Prompting Is All You Need
+  # Prompting Is All You Need
   
   <p><strong>An interactive pixel-based pong game with dynamic text collision and Web Audio API</strong></p>
   
@@ -19,32 +19,32 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [✨ Features](#-features)
-- [🚀 Quick Start](#-quick-start)
-- [🛠️ Installation](#️-installation)
-- [🎯 How It Works](#-how-it-works)
-- [🔧 Tech Stack](#-tech-stack)
-- [🎨 Customization](#-customization)
-- [📱 Responsive Design](#-responsive-design)
-- [🔊 Audio Features](#-audio-features)
-- [👨‍💻 Development](#-development)
-- [📄 License](#-license)
-- [👤 Author](#-author)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [How It Works](#how-it-works)
+- [Tech Stack](#tech-stack)
+- [Customization](#customization)
+- [Responsive Design](#responsive-design)
+- [Audio Features](#audio-features)
+- [Development](#development)
+- [License](#license)
+- [Author](#author)
 
-## ✨ Features
+## Features
 
-- 🎯 **Self-Playing Pong Game** - Watch as the ball bounces around with intelligent paddle AI
-- 🎨 **Pixel-Based Text Rendering** - Custom pixel font system for "PROMPTING IS ALL YOU NEED"
-- 🔊 **Web Audio Integration** - Dynamic sound effects for collisions and interactions
-- 📱 **Fully Responsive** - Adapts seamlessly to any screen size and orientation
-- ⚡ **Smooth Animations** - 60fps gameplay using requestAnimationFrame
-- 🎮 **Interactive Collisions** - Pixels change color when hit by the ball
-- 🎵 **Audio Feedback** - Different sounds for wall bounces, paddle hits, and pixel collisions
-- 🎨 **Minimalist Design** - Clean black and white aesthetic with modern UI
+- **Self-Playing Pong Game** - Watch as the ball bounces around with intelligent paddle AI
+- **Pixel-Based Text Rendering** - Custom pixel font system for "PROMPTING IS ALL YOU NEED"
+- **Web Audio Integration** - Dynamic sound effects for collisions and interactions
+- **Fully Responsive** - Adapts seamlessly to any screen size and orientation
+- **Smooth Animations** - 60fps gameplay using requestAnimationFrame
+- **Interactive Collisions** - Pixels change color when hit by the ball
+- **Audio Feedback** - Different sounds for wall bounces, paddle hits, and pixel collisions
+- **Minimalist Design** - Clean black and white aesthetic with modern UI
 
-## 🚀 Quick Start
+## Quick Start
 
 1. **Clone the repository**
    ```bash
@@ -73,7 +73,7 @@
 4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000) to see the game in action!
 
-## 🛠️ Installation
+## Installation
 
 ### Prerequisites
 
@@ -104,7 +104,7 @@
    npm start
    ```
 
-## 🎯 How It Works
+## How It Works
 
 The game is built using a combination of modern web technologies:
 
@@ -126,7 +126,7 @@ The game is built using a combination of modern web technologies:
 - **Boundary Detection**: Paddles stay within screen bounds
 - **Multi-Directional**: Both vertical and horizontal paddles
 
-## 🔧 Tech Stack
+## Tech Stack
 
 ### Frontend Framework
 - **Next.js 15.2.4** - React framework with App Router
@@ -153,7 +153,7 @@ The game is built using a combination of modern web technologies:
 - **PostCSS** - CSS processing
 - **TypeScript** - Static type checking
 
-## 🎨 Customization
+## Customization
 
 ### Colors
 You can easily customize the game's color scheme by modifying these constants in `prompting.tsx`:
@@ -187,7 +187,7 @@ playSound(audioContextRef.current, 330, 0.15, "square")
 playSound(audioContextRef.current, 440, 0.08, "sine")
 ```
 
-## 📱 Responsive Design
+## Responsive Design
 
 The game automatically adapts to different screen sizes:
 
@@ -201,7 +201,7 @@ The game automatically adapts to different screen sizes:
 - **Medium**: 768px - 1024px (tablet)
 - **Large**: > 1024px (desktop)
 
-## 🔊 Audio Features
+## Audio Features
 
 ### Sound Effects
 - **Wall Bounces**: Triangle wave at 220Hz
@@ -213,7 +213,7 @@ The game automatically adapts to different screen sizes:
 - **Cross-browser Support**: Works on Chrome, Firefox, Safari, and Edge
 - **Performance Optimized**: Minimal CPU usage for audio generation
 
-## 👨‍💻 Development
+## Development
 
 ### Project Structure
 ```
@@ -242,21 +242,21 @@ The game automatically adapts to different screen sizes:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 👤 Author
+## Author
 
 **Chris Tate** - [@ctatedev](https://x.com/ctatedev)
 
 ---
 
 <div align="center">
-  <p>Built with ❤️ using Next.js, React, and Canvas API</p>
+  <p>Built with Next.js, React, and Canvas API</p>
   <p>
     <a href="https://v0.dev/community/prompting-is-all-you-need-tokU2y8gQ4D">Open in v0</a> •
-    <a href="#-features">Features</a> •
-    <a href="#-installation">Installation</a>
+    <a href="#features">Features</a> •
+    <a href="#installation">Installation</a>
   </p>
 </div>
