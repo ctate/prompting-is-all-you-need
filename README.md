@@ -242,17 +242,26 @@ We welcome contributions! Here's how you can help:
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the [Apache License 2.0](LICENSE).
 
 ### What this means:
 - **Commercial use**: You can use this project in commercial applications
 - **Modification**: You can modify the code for your needs
 - **Distribution**: You can distribute the original or modified code
 - **Private use**: You can use it privately
-- **Attribution**: You must include the original copyright notice
+- **Patent use**: Contributors grant patent rights for their contributions
+- **Attribution**: You must include the original copyright notice and license
+- **State changes**: You must indicate if you modified the files
+- **License inclusion**: You must include a copy of the Apache License
+
+### Key Differences from MIT:
+- **Patent protection**: Apache 2.0 includes explicit patent grants and protections
+- **More detailed**: More comprehensive terms covering various scenarios
+- **Trademark protection**: Explicitly protects trademark rights
+- **Contribution handling**: Clear terms for how contributions are handled
 
 ### Quick Summary:
-The MIT License is a permissive license that allows you to do almost anything with the code, as long as you include the original copyright notice. It's one of the most popular open source licenses.
+The Apache License 2.0 is a permissive license that allows you to do almost anything with the code, while providing additional patent protections and more detailed terms than MIT. It's widely used in enterprise and open source projects.
 
 ---
 
