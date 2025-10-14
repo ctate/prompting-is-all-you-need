@@ -2,11 +2,38 @@
 
 import { useEffect, useRef } from "react"
 
-const COLOR = "#FFFFFF"
-const HIT_COLOR = "#333333"
-const BACKGROUND_COLOR = "#000000"
-const BALL_COLOR = "#FFFFFF"
-const PADDLE_COLOR = "#FFFFFF"
+// Theme-aware colors using CSS custom properties
+const getThemeColors = () => {
+  if (typeof window === "undefined") {
+    return {
+      COLOR: "#FFFFFF",
+      HIT_COLOR: "#333333", 
+      BACKGROUND_COLOR: "#000000",
+      BALL_COLOR: "#FFFFFF",
+      PADDLE_COLOR: "#FFFFFF"
+    }
+  }
+  
+  const isDark = document.documentElement.classList.contains('dark')
+  
+  if (isDark) {
+    return {
+      COLOR: "#FFFFFF",
+      HIT_COLOR: "#333333",
+      BACKGROUND_COLOR: "#000000", 
+      BALL_COLOR: "#FFFFFF",
+      PADDLE_COLOR: "#FFFFFF"
+    }
+  } else {
+    return {
+      COLOR: "#000000",
+      HIT_COLOR: "#CCCCCC",
+      BACKGROUND_COLOR: "#FFFFFF",
+      BALL_COLOR: "#000000", 
+      PADDLE_COLOR: "#000000"
+    }
+  }
+}
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
 
@@ -176,6 +203,7 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const colorsRef = useRef(getThemeColors())
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -186,6 +214,16 @@ export function PromptingIsAllYouNeed() {
 
     // Initialize audio context
     audioContextRef.current = createAudioContext()
+
+    // Theme change observer
+    const observer = new MutationObserver(() => {
+      colorsRef.current = getThemeColors()
+    })
+    
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class']
+    })
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -412,20 +450,22 @@ export function PromptingIsAllYouNeed() {
     const drawGame = () => {
       if (!ctx) return
 
-      ctx.fillStyle = BACKGROUND_COLOR
+      const colors = colorsRef.current
+      
+      ctx.fillStyle = colors.BACKGROUND_COLOR
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       pixelsRef.current.forEach((pixel) => {
-        ctx.fillStyle = pixel.hit ? HIT_COLOR : COLOR
+        ctx.fillStyle = pixel.hit ? colors.HIT_COLOR : colors.COLOR
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      ctx.fillStyle = BALL_COLOR
+      ctx.fillStyle = colors.BALL_COLOR
       ctx.beginPath()
       ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
       ctx.fill()
 
-      ctx.fillStyle = PADDLE_COLOR
+      ctx.fillStyle = colors.PADDLE_COLOR
       paddlesRef.current.forEach((paddle) => {
         ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
       })
@@ -443,6 +483,7 @@ export function PromptingIsAllYouNeed() {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      observer.disconnect()
     }
   }, [])
 
