@@ -8,9 +8,35 @@ const getThemeColors = (isDark: boolean) => ({
   COLOR: isDark ? "#FFFFFF" : "#000000",
   HIT_COLOR: isDark ? "#333333" : "#CCCCCC",
   BACKGROUND_COLOR: isDark ? "#000000" : "#FFFFFF",
-  BALL_COLOR: isDark ? "#FFFFFF" : "#000000",
   PADDLE_COLOR: isDark ? "#FFFFFF" : "#000000",
 })
+
+// Ball color palette
+const BALL_COLORS = [
+  "#FF6B6B", // Red
+  "#4ECDC4", // Teal
+  "#45B7D1", // Blue
+  "#96CEB4", // Green
+  "#FFEAA7", // Yellow
+  "#DDA0DD", // Plum
+  "#98D8C8", // Mint
+  "#F7DC6F", // Gold
+  "#BB8FCE", // Lavender
+  "#85C1E9", // Sky Blue
+]
+
+// Function to get ball color based on position and time
+const getBallColor = (x: number, y: number, time: number, isDark: boolean) => {
+  // Create a smooth cycling effect based on position and time
+  const cycleSpeed = 0.005
+  const positionFactor = (x + y) * 0.001
+  const timeFactor = time * cycleSpeed
+  const combinedFactor = positionFactor + timeFactor
+  
+  // Use sine wave for smooth color transitions
+  const colorIndex = Math.floor((Math.sin(combinedFactor) + 1) * (BALL_COLORS.length / 2)) % BALL_COLORS.length
+  return BALL_COLORS[colorIndex]
+}
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
 
@@ -180,6 +206,7 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const startTimeRef = useRef<number>(0)
   const { theme } = useTheme()
   const isDark = theme === "dark"
 
@@ -192,6 +219,9 @@ export function PromptingIsAllYouNeed() {
 
     // Initialize audio context
     audioContextRef.current = createAudioContext()
+    
+    // Initialize start time
+    startTimeRef.current = Date.now()
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -419,6 +449,7 @@ export function PromptingIsAllYouNeed() {
       if (!ctx) return
 
       const colors = getThemeColors(isDark)
+      const currentTime = Date.now() - startTimeRef.current
       
       ctx.fillStyle = colors.BACKGROUND_COLOR
       ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -428,7 +459,9 @@ export function PromptingIsAllYouNeed() {
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      ctx.fillStyle = colors.BALL_COLOR
+      // Dynamic ball color based on position and time
+      const ballColor = getBallColor(ballRef.current.x, ballRef.current.y, currentTime, isDark)
+      ctx.fillStyle = ballColor
       ctx.beginPath()
       ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
       ctx.fill()
