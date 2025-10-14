@@ -1,12 +1,8 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useTheme } from "next-themes"
 
-const COLOR = "#FFFFFF"
-const HIT_COLOR = "#333333"
-const BACKGROUND_COLOR = "#000000"
-const BALL_COLOR = "#FFFFFF"
-const PADDLE_COLOR = "#FFFFFF"
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
 
@@ -176,6 +172,15 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const { theme } = useTheme()
+
+  // Color scheme based on theme
+  const isDark = theme === "dark"
+  const COLOR = isDark ? "#FFFFFF" : "#000000"
+  const HIT_COLOR = isDark ? "#333333" : "#CCCCCC"
+  const BACKGROUND_COLOR = isDark ? "#000000" : "#FFFFFF"
+  const BALL_COLOR = isDark ? "#FFFFFF" : "#000000"
+  const PADDLE_COLOR = isDark ? "#FFFFFF" : "#000000"
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -444,7 +449,7 @@ export function PromptingIsAllYouNeed() {
     return () => {
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [])
+  }, [theme, COLOR, HIT_COLOR, BACKGROUND_COLOR, BALL_COLOR, PADDLE_COLOR])
 
   return (
     <canvas
