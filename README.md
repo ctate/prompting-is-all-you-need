@@ -25,17 +25,17 @@
 
 <br/>
 
-## 🎮 About
+## About
 
 **Prompting Is All You Need** is a captivating autonomous pong game that creates an endless hypnotic animation. Watch as a white ball bounces across the screen, interacting with pixel-art text that reads "PROMPTING IS ALL YOU NEED". The game features intelligent paddles that automatically track the ball's movement, creating a perpetual gameplay experience.
 
 This project showcases the power of creative coding, combining classic game mechanics with modern web technologies to create an engaging visual experience. Each pixel collision triggers subtle sound effects, adding an auditory dimension to the visual spectacle.
 
-## 🌐 Demo
+## Demo
 
 Visit the [live demo](https://v0.dev/community/prompting-is-all-you-need-tokU2y8gQ4D) to see the game in action.
 
-## ✨ Features
+## Features
 
 ### Visual & Interactive
 - **Self-Playing Gameplay** - Fully autonomous ball and paddle movement
@@ -54,7 +54,7 @@ Visit the [live demo](https://v0.dev/community/prompting-is-all-you-need-tokU2y8
 - **Collision Detection** - Precise pixel-perfect collision algorithms
 - **Minimalist Aesthetic** - Clean black and white color scheme
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -94,7 +94,7 @@ pnpm build
 pnpm start
 ```
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 ### Core Framework
 - **[Next.js 15.2.4](https://nextjs.org/)** - React framework with App Router
@@ -118,7 +118,7 @@ pnpm start
 - **[date-fns](https://date-fns.org/)** - Modern date utility library
 - **[Recharts](https://recharts.org/)** - Composable charting library
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── app/
@@ -144,7 +144,7 @@ pnpm start
   - Pixel map definitions for text rendering
   - Sound generation using Web Audio API
 
-## 🎨 Customization
+## Customization
 
 ### Modifying Colors
 
@@ -177,7 +177,7 @@ const BALL_SPEED = 6 * scale    // Ball velocity
 const paddleLength = 10 * adjustedLargePixelSize  // Paddle size
 ```
 
-## 🎵 Sound Effects
+## Sound Effects
 
 The game generates retro-style sound effects using the Web Audio API:
 
@@ -187,7 +187,7 @@ The game generates retro-style sound effects using the Web Audio API:
 
 All sounds use exponential gain ramping for smooth audio decay.
 
-## 🌟 How It Works
+## How It Works
 
 1. **Initialization**: The game creates pixel arrays from letter definitions to spell out text
 2. **Animation Loop**: `requestAnimationFrame` updates game state at 60 FPS
@@ -196,11 +196,11 @@ All sounds use exponential gain ramping for smooth audio decay.
 5. **Rendering**: Canvas API draws all elements (pixels, ball, paddles) each frame
 6. **Responsive Scaling**: All elements scale proportionally to viewport size
 
-## 📄 License
+## License
 
 This project is open source and available under the MIT License.
 
-## 👨‍💻 Author
+## Author
 
 **Chris Tate**
 - Twitter: [@ctatedev](https://x.com/ctatedev)
@@ -209,5 +209,5 @@ This project is open source and available under the MIT License.
 ---
 
 <p align="center">
-  Made with ❤️ using Next.js and Canvas API
+  Made with Next.js and Canvas API
 </p>
