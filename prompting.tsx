@@ -187,6 +187,22 @@ export function PromptingIsAllYouNeed() {
     // Initialize audio context
     audioContextRef.current = createAudioContext()
 
+    // Resume audio context on first user interaction (required by browser autoplay policies)
+    const resumeAudio = () => {
+      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+        audioContextRef.current.resume()
+      }
+    }
+
+    // Add event listeners for various user interactions
+    const events = ['click', 'keydown', 'touchstart']
+    const resumeOnce = () => {
+      resumeAudio()
+      // Remove all listeners after first interaction
+      events.forEach(event => window.removeEventListener(event, resumeOnce))
+    }
+    events.forEach(event => window.addEventListener(event, resumeOnce))
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
@@ -443,6 +459,8 @@ export function PromptingIsAllYouNeed() {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      // Clean up audio resume listeners if they haven't fired yet
+      events.forEach(event => window.removeEventListener(event, resumeOnce))
     }
   }, [])
 
