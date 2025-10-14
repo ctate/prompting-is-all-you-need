@@ -16,7 +16,7 @@ export function SoundToggle({ isMuted, onToggle }: SoundToggleProps) {
       variant="outline"
       size="icon"
       onClick={onToggle}
-      className="fixed top-4 left-4 z-50 bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 dark:bg-black/10 dark:border-white/20 dark:hover:bg-black/20"
+      className="fixed top-4 right-20 z-50 bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 dark:bg-black/10 dark:border-white/20 dark:hover:bg-black/20"
     >
       {isMuted ? (
         <VolumeX className="h-[1.2rem] w-[1.2rem] text-white dark:text-white" />
