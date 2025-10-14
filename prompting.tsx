@@ -7,7 +7,6 @@ import { useTheme } from "next-themes"
 const getThemeColors = (isDark: boolean) => ({
   COLOR: isDark ? "#FFFFFF" : "#000000",
   HIT_COLOR: isDark ? "#333333" : "#CCCCCC",
-  BACKGROUND_COLOR: isDark ? "#000000" : "#FFFFFF",
   PADDLE_COLOR: isDark ? "#FFFFFF" : "#000000",
 })
 
@@ -25,6 +24,25 @@ const BALL_COLORS = [
   "#85C1E9", // Sky Blue
 ]
 
+// Background color palette (darker colors for better contrast)
+const BG_COLORS = [
+  "#1a1a2e", // Dark Navy
+  "#16213e", // Deep Blue
+  "#0f3460", // Darker Blue
+  "#533483", // Purple
+  "#7209b7", // Violet
+  "#560bad", // Deep Purple
+  "#3a0ca3", // Royal Blue
+  "#3f37c9", // Indigo
+  "#4361ee", // Blue
+  "#4895ef", // Light Blue
+  "#4cc9f0", // Cyan
+  "#06ffa5", // Mint Green
+  "#06d6a0", // Teal
+  "#118ab2", // Ocean Blue
+  "#073b4c", // Dark Teal
+]
+
 // Function to get ball color based on position and time
 const getBallColor = (x: number, y: number, time: number, isDark: boolean) => {
   // Create a smooth cycling effect based on position and time
@@ -36,6 +54,35 @@ const getBallColor = (x: number, y: number, time: number, isDark: boolean) => {
   // Use sine wave for smooth color transitions
   const colorIndex = Math.floor((Math.sin(combinedFactor) + 1) * (BALL_COLORS.length / 2)) % BALL_COLORS.length
   return BALL_COLORS[colorIndex]
+}
+
+// Function to get background color based on time
+const getBackgroundColor = (time: number, isDark: boolean) => {
+  if (!isDark) {
+    // For light mode, use subtle pastel colors
+    const lightColors = [
+      "#f8f9fa", // Light Gray
+      "#e9ecef", // Light Blue Gray
+      "#f1f3f4", // Very Light Gray
+      "#fef7e0", // Light Cream
+      "#f0f8ff", // Alice Blue
+      "#f5f5dc", // Beige
+      "#ffe4e1", // Misty Rose
+      "#e6f3ff", // Light Blue
+      "#f0fff0", // Honeydew
+      "#fff8dc", // Cornsilk
+    ]
+    const cycleSpeed = 0.002
+    const timeFactor = time * cycleSpeed
+    const colorIndex = Math.floor((Math.sin(timeFactor) + 1) * (lightColors.length / 2)) % lightColors.length
+    return lightColors[colorIndex]
+  } else {
+    // For dark mode, use the vibrant background colors
+    const cycleSpeed = 0.003
+    const timeFactor = time * cycleSpeed
+    const colorIndex = Math.floor((Math.sin(timeFactor) + 1) * (BG_COLORS.length / 2)) % BG_COLORS.length
+    return BG_COLORS[colorIndex]
+  }
 }
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
@@ -451,7 +498,9 @@ export function PromptingIsAllYouNeed() {
       const colors = getThemeColors(isDark)
       const currentTime = Date.now() - startTimeRef.current
       
-      ctx.fillStyle = colors.BACKGROUND_COLOR
+      // Dynamic background color based on time
+      const backgroundColor = getBackgroundColor(currentTime, isDark)
+      ctx.fillStyle = backgroundColor
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       pixelsRef.current.forEach((pixel) => {
