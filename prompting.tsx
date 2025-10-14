@@ -172,15 +172,29 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const animationFrameRef = useRef<number | null>(null)
   const { theme } = useTheme()
 
-  // Color scheme based on theme
-  const isDark = theme === "dark"
-  const COLOR = isDark ? "#FFFFFF" : "#000000"
-  const HIT_COLOR = isDark ? "#333333" : "#CCCCCC"
-  const BACKGROUND_COLOR = isDark ? "#000000" : "#FFFFFF"
-  const BALL_COLOR = isDark ? "#FFFFFF" : "#000000"
-  const PADDLE_COLOR = isDark ? "#FFFFFF" : "#000000"
+  // Color scheme based on theme stored in refs so they update without restarting animation
+  const colorsRef = useRef({
+    COLOR: "#FFFFFF",
+    HIT_COLOR: "#333333",
+    BACKGROUND_COLOR: "#000000",
+    BALL_COLOR: "#FFFFFF",
+    PADDLE_COLOR: "#FFFFFF",
+  })
+
+  // Update colors when theme changes without restarting animation
+  useEffect(() => {
+    const isDark = theme === "dark"
+    colorsRef.current = {
+      COLOR: isDark ? "#FFFFFF" : "#000000",
+      HIT_COLOR: isDark ? "#333333" : "#CCCCCC",
+      BACKGROUND_COLOR: isDark ? "#000000" : "#FFFFFF",
+      BALL_COLOR: isDark ? "#FFFFFF" : "#000000",
+      PADDLE_COLOR: isDark ? "#FFFFFF" : "#000000",
+    }
+  }, [theme])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -417,20 +431,21 @@ export function PromptingIsAllYouNeed() {
     const drawGame = () => {
       if (!ctx) return
 
-      ctx.fillStyle = BACKGROUND_COLOR
+      const colors = colorsRef.current
+      ctx.fillStyle = colors.BACKGROUND_COLOR
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       pixelsRef.current.forEach((pixel) => {
-        ctx.fillStyle = pixel.hit ? HIT_COLOR : COLOR
+        ctx.fillStyle = pixel.hit ? colors.HIT_COLOR : colors.COLOR
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      ctx.fillStyle = BALL_COLOR
+      ctx.fillStyle = colors.BALL_COLOR
       ctx.beginPath()
       ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
       ctx.fill()
 
-      ctx.fillStyle = PADDLE_COLOR
+      ctx.fillStyle = colors.PADDLE_COLOR
       paddlesRef.current.forEach((paddle) => {
         ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
       })
@@ -439,7 +454,7 @@ export function PromptingIsAllYouNeed() {
     const gameLoop = () => {
       updateGame()
       drawGame()
-      requestAnimationFrame(gameLoop)
+      animationFrameRef.current = requestAnimationFrame(gameLoop)
     }
 
     resizeCanvas()
@@ -448,8 +463,11 @@ export function PromptingIsAllYouNeed() {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
     }
-  }, [theme, COLOR, HIT_COLOR, BACKGROUND_COLOR, BALL_COLOR, PADDLE_COLOR])
+  }, [])
 
   return (
     <canvas
