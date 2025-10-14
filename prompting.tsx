@@ -438,10 +438,11 @@ export function PromptingIsAllYouNeed() {
       })
     }
 
+    let animationFrameId: number
     const gameLoop = () => {
       updateGame()
       drawGame()
-      requestAnimationFrame(gameLoop)
+      animationFrameId = requestAnimationFrame(gameLoop)
     }
 
     resizeCanvas()
@@ -450,6 +451,7 @@ export function PromptingIsAllYouNeed() {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [currentTheme])
 
