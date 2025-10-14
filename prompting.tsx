@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const COLOR = "#FFFFFF"
 const HIT_COLOR = "#333333"
@@ -176,6 +176,7 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const [hasInteracted, setHasInteracted] = useState(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -186,22 +187,6 @@ export function PromptingIsAllYouNeed() {
 
     // Initialize audio context
     audioContextRef.current = createAudioContext()
-
-    // Resume audio context on first user interaction (required by browser autoplay policies)
-    const resumeAudio = () => {
-      if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
-        audioContextRef.current.resume()
-      }
-    }
-
-    // Add event listeners for various user interactions
-    const events = ['click', 'keydown', 'touchstart']
-    const resumeOnce = () => {
-      resumeAudio()
-      // Remove all listeners after first interaction
-      events.forEach(event => window.removeEventListener(event, resumeOnce))
-    }
-    events.forEach(event => window.addEventListener(event, resumeOnce))
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -459,17 +444,44 @@ export function PromptingIsAllYouNeed() {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
-      // Clean up audio resume listeners if they haven't fired yet
-      events.forEach(event => window.removeEventListener(event, resumeOnce))
     }
   }, [])
 
+  const handleStartClick = () => {
+    // Resume audio context on user interaction
+    if (audioContextRef.current && audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume()
+    }
+    setHasInteracted(true)
+  }
+
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full"
-      aria-label="Prompting Is All You Need: Fullscreen Pong game with pixel text"
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="fixed top-0 left-0 w-full h-full"
+        aria-label="Prompting Is All You Need: Fullscreen Pong game with pixel text"
+      />
+      {!hasInteracted && (
+        <div
+          className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm cursor-pointer z-10"
+          onClick={handleStartClick}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              handleStartClick()
+            }
+          }}
+          aria-label="Click to start"
+        >
+          <div className="text-white text-center">
+            <div className="text-4xl font-bold mb-4 animate-pulse">Click to Start</div>
+            <div className="text-sm opacity-70">Click anywhere to begin</div>
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
