@@ -24,28 +24,28 @@
 
 <br/>
 
-## 🎮 About
+## About
 
 **Prompting Is All You Need** is a hypnotic, self-playing pong game that demonstrates the power of AI-assisted development. This project features a continuously bouncing ball that interacts with pixel-rendered text and autonomous paddles, creating an engaging visual showcase of dynamic canvas animations.
 
 The entire application was built using AI prompting, showcasing how natural language can be transformed into production-ready code. Watch as the ball bounces endlessly, the pixels react to collisions, and the paddles intelligently track their target — all rendered with retro pixel-perfect precision.
 
-## ✨ Features
+## Features
 
 ### Core Gameplay
-- **🤖 Fully Autonomous** — Self-playing animation requiring no user input
-- **🎯 Smart Paddles** — Automatic paddle tracking that follows the ball
-- **💥 Reactive Pixels** — Dynamic color changes on ball collision with text
-- **🎵 Audio Feedback** — Retro-style sound effects using Web Audio API
+- **Fully Autonomous** — Self-playing animation requiring no user input
+- **Smart Paddles** — Automatic paddle tracking that follows the ball
+- **Reactive Pixels** — Dynamic color changes on ball collision with text
+- **Audio Feedback** — Retro-style sound effects using Web Audio API
 
 ### Technical Features
-- **📱 Fully Responsive** — Adapts seamlessly to any screen size
-- **🎨 Pixel-Perfect Rendering** — Custom pixel font system for authentic retro aesthetics
-- **⚡ Smooth Performance** — Optimized canvas rendering with requestAnimationFrame
-- **🎲 Physics Simulation** — Realistic ball movement with collision detection
-- **🖤 Minimalist Design** — Clean black and white aesthetic
+- **Fully Responsive** — Adapts seamlessly to any screen size
+- **Pixel-Perfect Rendering** — Custom pixel font system for authentic retro aesthetics
+- **Smooth Performance** — Optimized canvas rendering with requestAnimationFrame
+- **Physics Simulation** — Realistic ball movement with collision detection
+- **Minimalist Design** — Clean black and white aesthetic
 
-## 🛠 Tech Stack
+## Tech Stack
 
 This project leverages modern web technologies:
 
@@ -58,7 +58,7 @@ This project leverages modern web technologies:
 - **[Radix UI](https://www.radix-ui.com/)** — Accessible component primitives
 - **[shadcn/ui](https://ui.shadcn.com/)** — Beautifully designed components
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -97,7 +97,7 @@ pnpm build
 pnpm start
 ```
 
-## 🔍 How It Works
+## How It Works
 
 The animation is powered by a custom canvas-based rendering engine:
 
@@ -121,7 +121,7 @@ The animation is powered by a custom canvas-based rendering engine:
 - Different frequencies for wall hits, paddle hits, and pixel collisions
 - Oscillators create authentic 8-bit sound effects
 
-## 📦 Project Structure
+## Project Structure
 
 ```
 ├── app/
@@ -137,7 +137,7 @@ The animation is powered by a custom canvas-based rendering engine:
 └── public/               # Static assets
 ```
 
-## 🎨 Customization
+## Customization
 
 You can easily customize the game by modifying constants in `prompting.tsx`:
 
@@ -149,7 +149,7 @@ const BALL_COLOR = "#FFFFFF"      // Ball color
 const PADDLE_COLOR = "#FFFFFF"    // Paddle color
 ```
 
-## 🤝 Contributing
+## Contributing
 
 This project demonstrates AI-assisted development. Feel free to fork and experiment with:
 - Adding new pixel fonts or text
@@ -157,11 +157,11 @@ This project demonstrates AI-assisted development. Feel free to fork and experim
 - Creating new visual effects
 - Adding user controls or game modes
 
-## 📄 License
+## License
 
 This project is open source and available for educational and demonstration purposes.
 
-## 👨‍💻 Author
+## Author
 
 **Chris Tate** ([@ctatedev](https://x.com/ctatedev))
 
@@ -170,5 +170,5 @@ Built with [v0.dev](https://v0.dev/) — where prompting truly is all you need.
 ---
 
 <p align="center">
-  <strong>⭐ If you enjoyed this project, consider giving it a star!</strong>
+  <strong>If you enjoyed this project, consider giving it a star!</strong>
 </p>
