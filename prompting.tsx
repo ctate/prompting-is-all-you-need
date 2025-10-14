@@ -59,7 +59,7 @@ const getBallColor = (x: number, y: number, time: number, isDark: boolean) => {
 // Function to get background color based on time
 const getBackgroundColor = (time: number, isDark: boolean) => {
   if (!isDark) {
-    // For light mode, use subtle pastel colors
+    // For light mode, use very subtle pastel colors with slow transitions
     const lightColors = [
       "#f8f9fa", // Light Gray
       "#e9ecef", // Light Blue Gray
@@ -72,13 +72,13 @@ const getBackgroundColor = (time: number, isDark: boolean) => {
       "#f0fff0", // Honeydew
       "#fff8dc", // Cornsilk
     ]
-    const cycleSpeed = 0.002
+    const cycleSpeed = 0.0003 // Much slower cycling
     const timeFactor = time * cycleSpeed
     const colorIndex = Math.floor((Math.sin(timeFactor) + 1) * (lightColors.length / 2)) % lightColors.length
     return lightColors[colorIndex]
   } else {
-    // For dark mode, use the vibrant background colors
-    const cycleSpeed = 0.003
+    // For dark mode, use slower transitions with fewer color changes
+    const cycleSpeed = 0.0005 // Much slower cycling
     const timeFactor = time * cycleSpeed
     const colorIndex = Math.floor((Math.sin(timeFactor) + 1) * (BG_COLORS.length / 2)) % BG_COLORS.length
     return BG_COLORS[colorIndex]
