@@ -4,7 +4,7 @@
 </a>
 
 <p align="center">
-  An interactive pixel-based pong game built with React, Canvas API, and Next.js.
+  <strong>A mesmerizing self-playing pong game featuring interactive pixel art text and dynamic sound effects</strong>
 </p>
 
 <p align="center">
@@ -14,43 +14,159 @@
 </p>
 
 <p align="center">
-  <a href="#about"><strong>About</strong></a> ·
-  <a href="#how-to-use"><strong>How to Use</strong></a> ·
-  <a href="#tech"><strong>Tech</strong></a> ·
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#author"><strong>Author</strong></a>
+  <a href="#-about"><strong>About</strong></a> ·
+  <a href="#-features"><strong>Features</strong></a> ·
+  <a href="#-getting-started"><strong>Getting Started</strong></a> ·
+  <a href="#-tech-stack"><strong>Tech Stack</strong></a> ·
+  <a href="#-how-it-works"><strong>How It Works</strong></a> ·
+  <a href="#-author"><strong>Author</strong></a>
 </p>
 <br/>
 
-## About
+## 🎮 About
 
-Prompting Is All You Need is an interactive pixel-based pong game that features a self-playing animation where a ball bounces around the screen, hitting pixel text and paddles. The game showcases dynamic animations and responsive design, creating an engaging visual experience.
+**Prompting Is All You Need** is an interactive pixel-based pong game that showcases the power of creative coding and dynamic animations. Watch as a ball bounces around the screen, interacting with custom pixel-rendered text and intelligent AI paddles that track its every move. The game features retro-style sound effects and a minimalist black-and-white aesthetic that creates a captivating visual experience.
 
-## How to Use
+This project demonstrates advanced Canvas API techniques, real-time collision detection, and responsive design principles—all wrapped in a modern React + Next.js application.
 
-- Simply load the page to watch the animation play automatically
-- The ball will bounce around the screen, hitting the pixel text and paddles
-- The paddles will automatically track and follow the ball
-- The pixels change color when hit by the ball
-- Responsive design adapts to different screen sizes
+## ✨ Features
 
-## Tech
+### 🎨 Visual Design
+- **Custom Pixel Font Rendering** - Text rendered from scratch using pixel matrices for authentic retro look
+- **Dynamic Color Changes** - Pixels change color when struck by the ball, creating visual feedback
+- **Responsive Scaling** - Automatically adapts to any screen size while maintaining proportions
+- **Minimalist Aesthetic** - Clean black and white design inspired by classic arcade games
 
-- React & Next.js
-- Canvas API for rendering
-- Dynamic animation with requestAnimationFrame
-- Responsive design that adapts to viewport size
-- Pixel-based text rendering
+### 🎵 Audio Experience
+- **Procedural Sound Effects** - Real-time audio generation using Web Audio API
+- **Context-Aware Sounds** - Different sounds for wall bounces, paddle hits, and pixel collisions
+- **Oscillator-Based Synthesis** - Pure sine, triangle, and square waves create distinct tones
 
-## Features
+### 🤖 Intelligent Gameplay
+- **Self-Playing Mode** - Four AI paddles automatically track and respond to the ball
+- **Smooth Paddle Movement** - Easing functions create natural, fluid motion
+- **Advanced Collision Detection** - Precise pixel-level collision with physics-based bounce direction
+- **Multi-Directional Paddles** - Both vertical and horizontal paddles create complex ball trajectories
 
-- Self-playing pong game
-- Pixel text that reacts to ball collisions
-- Automatic paddle movement
-- Responsive design that works on all screen sizes
-- Smooth animations with collision detection
-- Minimalist black and white aesthetic
+### 🔧 Technical Excellence
+- **Performance Optimized** - 60 FPS animation using `requestAnimationFrame`
+- **TypeScript Support** - Fully typed for better developer experience
+- **React Hooks** - Modern React patterns with `useRef` and `useEffect`
+- **Client-Side Rendering** - Optimized for browser performance
 
-## Author
+## 🚀 Getting Started
 
-- Chris Tate ([@ctatedev](https://x.com/ctatedev))
+### Prerequisites
+
+- Node.js 18+ installed on your machine
+- pnpm package manager (or npm/yarn)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd prompting-is-all-you-need
+   ```
+
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   # or
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Run the development server**
+   ```bash
+   pnpm dev
+   # or
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. **Open your browser**
+   
+   Navigate to [http://localhost:3000](http://localhost:3000) to see the game in action!
+
+### Building for Production
+
+```bash
+pnpm build
+pnpm start
+```
+
+## 🛠️ Tech Stack
+
+- **[Next.js 15](https://nextjs.org/)** - React framework with App Router
+- **[React 19](https://react.dev/)** - UI library with modern hooks
+- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
+- **[Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API)** - 2D graphics rendering
+- **[Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)** - Real-time audio synthesis
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
+- **[shadcn/ui](https://ui.shadcn.com/)** - Beautifully designed components
+
+## 🎯 How It Works
+
+### Pixel Text Rendering
+
+The text "PROMPTING IS ALL YOU NEED" is rendered using custom pixel matrices defined for each letter. The system:
+- Maps each character to a 2D array representing its pixel structure
+- Scales pixels based on viewport size for responsiveness
+- Calculates precise positioning for centered, visually balanced text
+- Tracks collision state for each individual pixel
+
+### Collision Detection
+
+The game implements precise collision detection:
+- **Ball-Wall Collisions** - Reverses velocity when hitting screen edges
+- **Ball-Paddle Collisions** - Bounces ball based on paddle orientation
+- **Ball-Pixel Collisions** - Determines bounce direction based on impact angle
+- **Sound Triggers** - Each collision type triggers a unique sound effect
+
+### Paddle AI
+
+The four paddles use a simple but effective AI algorithm:
+- Calculate target position based on ball's current location
+- Apply smooth easing (10% interpolation) for natural movement
+- Clamp position to prevent moving off-screen
+- Update independently each frame for responsive tracking
+
+### Performance Optimization
+
+- Uses `useRef` to store game state without triggering re-renders
+- Single `useEffect` hook manages entire game lifecycle
+- Canvas operations batched in single animation frame
+- Audio context created once and reused for all sound effects
+
+## 📝 Project Structure
+
+```
+├── app/
+│   ├── globals.css          # Global styles
+│   ├── layout.tsx           # Root layout
+│   └── page.tsx             # Main page
+├── components/
+│   ├── ui/                  # shadcn/ui components
+│   └── theme-provider.tsx   # Theme configuration
+├── prompting.tsx            # Main game component
+├── package.json             # Dependencies
+└── README.md               # This file
+```
+
+## 👨‍💻 Author
+
+**Chris Tate**
+- Twitter/X: [@ctatedev](https://x.com/ctatedev)
+
+## 📄 License
+
+This project is open source and available for educational and personal use.
+
+---
+
+<p align="center">
+  Made with ❤️ using React, Canvas API, and Next.js
+</p>
