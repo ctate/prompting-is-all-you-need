@@ -16,23 +16,23 @@
 </p>
 
 <p align="center">
-  <a href="#-about"><strong>About</strong></a> ·
-  <a href="#-demo"><strong>Demo</strong></a> ·
-  <a href="#-features"><strong>Features</strong></a> ·
-  <a href="#-tech-stack"><strong>Tech Stack</strong></a> ·
-  <a href="#-getting-started"><strong>Getting Started</strong></a> ·
-  <a href="#-how-it-works"><strong>How It Works</strong></a> ·
-  <a href="#-author"><strong>Author</strong></a>
+  <a href="#about"><strong>About</strong></a> ·
+  <a href="#demo"><strong>Demo</strong></a> ·
+  <a href="#features"><strong>Features</strong></a> ·
+  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+  <a href="#getting-started"><strong>Getting Started</strong></a> ·
+  <a href="#how-it-works"><strong>How It Works</strong></a> ·
+  <a href="#author"><strong>Author</strong></a>
 </p>
 <br/>
 
-## 🎮 About
+## About
 
 **Prompting Is All You Need** is a captivating visual experience that combines the nostalgia of classic Pong with modern web technologies. This self-playing animation creates an endless, hypnotic loop where a ball bounces around the screen, interacting with pixel-rendered text and AI-controlled paddles.
 
 The project demonstrates the power of the Canvas API and showcases how complex animations can be created with clean, performant code. Each collision produces dynamically generated sound effects, creating an immersive audiovisual experience.
 
-## 🎬 Demo
+## Demo
 
 Simply load the page and watch the magic happen! The animation runs automatically with no user interaction required. The experience is:
 - **Fully responsive** - Adapts beautifully to any screen size
@@ -40,34 +40,34 @@ Simply load the page and watch the magic happen! The animation runs automaticall
 - **Intelligent** - Paddles automatically track and follow the ball's movement
 - **Auditory** - Generates unique sound effects for each collision type
 
-## ✨ Features
+## Features
 
 ### Visual Effects
-- 🎨 **Pixel-Perfect Text Rendering** - Custom pixel font displaying "PROMPTING IS ALL YOU NEED"
-- 🌈 **Dynamic Color Changes** - Pixels transition from white to gray when hit
-- ⚡ **Smooth Animations** - 60 FPS performance using `requestAnimationFrame`
-- 📱 **Responsive Design** - Automatically scales to fit any viewport
+- **Pixel-Perfect Text Rendering** - Custom pixel font displaying "PROMPTING IS ALL YOU NEED"
+- **Dynamic Color Changes** - Pixels transition from white to gray when hit
+- **Smooth Animations** - 60 FPS performance using `requestAnimationFrame`
+- **Responsive Design** - Automatically scales to fit any viewport
 
 ### Game Mechanics
-- 🏓 **Self-Playing Pong** - Fully autonomous gameplay with no user input
-- 🤖 **AI Paddle Movement** - Four paddles intelligently track the ball
-- 💥 **Advanced Collision Detection** - Precise pixel-level collision physics
-- 🎯 **Smart Ball Physics** - Directional bouncing based on collision angles
+- **Self-Playing Pong** - Fully autonomous gameplay with no user input
+- **AI Paddle Movement** - Four paddles intelligently track the ball
+- **Advanced Collision Detection** - Precise pixel-level collision physics
+- **Smart Ball Physics** - Directional bouncing based on collision angles
 
 ### Audio Experience
-- 🔊 **Generative Sound Effects** - Web Audio API creates unique sounds for:
+- **Generative Sound Effects** - Web Audio API creates unique sounds for:
   - Pixel collisions (440 Hz sine wave)
   - Paddle hits (330 Hz square wave)
   - Wall bounces (220 Hz triangle wave)
-- 🎵 **Dynamic Audio Context** - Sounds adapt to gameplay in real-time
+- **Dynamic Audio Context** - Sounds adapt to gameplay in real-time
 
 ### Technical Excellence
-- ⚙️ **TypeScript** - Fully typed for robust code
-- 🎯 **React Hooks** - Modern React patterns with `useRef` and `useEffect`
-- 🚀 **Next.js 15** - Server-side rendering and optimal performance
-- 📦 **Zero Runtime Dependencies** - Pure Canvas API implementation
+- **TypeScript** - Fully typed for robust code
+- **React Hooks** - Modern React patterns with `useRef` and `useEffect`
+- **Next.js 15** - Server-side rendering and optimal performance
+- **Zero Runtime Dependencies** - Pure Canvas API implementation
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Core Technologies
 - **[Next.js 15.2.4](https://nextjs.org/)** - React framework with App Router
@@ -85,7 +85,7 @@ Simply load the page and watch the magic happen! The animation runs automaticall
 - **shadcn/ui** - High-quality component library (included but not used in main animation)
 - **Radix UI** - Accessible component primitives (available for extensions)
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 18+ installed
@@ -119,7 +119,7 @@ pnpm build
 pnpm start
 ```
 
-## 🔍 How It Works
+## How It Works
 
 ### Pixel Text Rendering
 The text is rendered using a custom pixel map system. Each letter is defined as a 2D array where `1` represents a pixel and `0` represents empty space:
@@ -150,7 +150,7 @@ paddle.y += (paddle.targetY - paddle.y) * 0.1
 ### Sound Generation
 Unique sounds are created for each interaction type using the Web Audio API with different waveforms and frequencies.
 
-## 📝 Code Structure
+## Code Structure
 
 ```
 ├── app/
@@ -162,7 +162,7 @@ Unique sounds are created for each interaction type using the Web Audio API with
 └── public/               # Static assets
 ```
 
-## 🎨 Customization
+## Customization
 
 You can easily customize the experience by modifying constants in `prompting.tsx`:
 
@@ -172,11 +172,11 @@ You can easily customize the experience by modifying constants in `prompting.tsx
 - `PIXEL_MAP` - Add new letters or modify existing ones
 - Sound frequencies and waveforms in `playSound()` calls
 
-## 📄 License
+## License
 
 This project is open source and available for educational and personal use.
 
-## 👨‍💻 Author
+## Author
 
 **Chris Tate**
 - Twitter: [@ctatedev](https://x.com/ctatedev)
@@ -185,7 +185,7 @@ This project is open source and available for educational and personal use.
 ---
 
 <p align="center">
-  <strong>Made with ❤️ using v0.dev</strong>
+  <strong>Made with love using v0.dev</strong>
   <br/>
   <sub>A demonstration of creative coding with React and Canvas API</sub>
 </p>
