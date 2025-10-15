@@ -214,43 +214,68 @@ export function PromptingIsAllYouNeed() {
     let oldHeight = window.innerHeight
 
     const resizeCanvas = () => {
-      const scaleX = window.innerWidth / oldWidth
-      const scaleY = window.innerHeight / oldHeight
-
-      // Update canvas dimensions
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-      
-      const oldScale = scaleRef.current
-      scaleRef.current = Math.min(canvas.width / 1000, canvas.height / 1000)
-      const scaleRatio = scaleRef.current / oldScale
-
       // If this is the first initialization (no pixels yet), initialize the game
       if (pixelsRef.current.length === 0) {
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        scaleRef.current = Math.min(canvas.width / 1000, canvas.height / 1000)
         initializeGame()
       } else {
-        // Scale existing game elements
+        // Calculate how much the dimensions changed
+        const scaleX = window.innerWidth / oldWidth
+        const scaleY = window.innerHeight / oldHeight
+
+        // Update canvas dimensions
+        canvas.width = window.innerWidth
+        canvas.height = window.innerHeight
+        
+        const oldScale = scaleRef.current
+        scaleRef.current = Math.min(canvas.width / 1000, canvas.height / 1000)
+        const uniformScale = scaleRef.current / oldScale
+
+        // Scale existing game elements with uniform scaling
         pixelsRef.current.forEach((pixel) => {
-          pixel.x *= scaleX
-          pixel.y *= scaleY
-          pixel.size *= scaleRatio
+          // Scale position relative to center
+          const centerX = oldWidth / 2
+          const centerY = oldHeight / 2
+          const relX = pixel.x - centerX
+          const relY = pixel.y - centerY
+          
+          pixel.x = canvas.width / 2 + relX * uniformScale
+          pixel.y = canvas.height / 2 + relY * uniformScale
+          pixel.size *= uniformScale
         })
 
         // Scale ball
         const ball = ballRef.current
-        ball.x *= scaleX
-        ball.y *= scaleY
-        ball.dx *= scaleRatio
-        ball.dy *= scaleRatio
-        ball.radius *= scaleRatio
+        const centerX = oldWidth / 2
+        const centerY = oldHeight / 2
+        const relX = ball.x - centerX
+        const relY = ball.y - centerY
+        
+        ball.x = canvas.width / 2 + relX * uniformScale
+        ball.y = canvas.height / 2 + relY * uniformScale
+        ball.dx *= uniformScale
+        ball.dy *= uniformScale
+        ball.radius *= uniformScale
 
         // Scale paddles
-        paddlesRef.current.forEach((paddle) => {
-          paddle.x *= scaleX
-          paddle.y *= scaleY
-          paddle.width *= (paddle.isVertical ? scaleRatio : scaleX)
-          paddle.height *= (paddle.isVertical ? scaleY : scaleRatio)
-          paddle.targetY *= (paddle.isVertical ? scaleY : scaleX)
+        paddlesRef.current.forEach((paddle, index) => {
+          if (paddle.isVertical) {
+            // Left and right paddles
+            paddle.x = index === 0 ? 0 : canvas.width - paddle.width * uniformScale
+            paddle.y = (paddle.y / oldHeight) * canvas.height
+            paddle.width *= uniformScale
+            paddle.height *= uniformScale
+            paddle.targetY = (paddle.targetY / oldHeight) * canvas.height
+          } else {
+            // Top and bottom paddles
+            paddle.x = (paddle.x / oldWidth) * canvas.width
+            paddle.y = index === 2 ? 0 : canvas.height - paddle.height * uniformScale
+            paddle.width *= uniformScale
+            paddle.height *= uniformScale
+            paddle.targetY = (paddle.targetY / oldWidth) * canvas.width
+          }
         })
       }
 
