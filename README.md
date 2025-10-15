@@ -31,13 +31,13 @@ This project demonstrates the power of modern web technologies combined with cre
 
 ## Features
 
-- **Self-Playing Animation** - Watch the game play itself with intelligent paddle movement
-- **Pixel Art Rendering** - Custom pixel-based text rendering on canvas
-- **Dynamic Collisions** - Real-time collision detection with visual feedback
-- **Responsive Design** - Adapts seamlessly to different screen sizes and orientations
-- **Smooth Animations** - 60 FPS animations using requestAnimationFrame
-- **Theme Support** - Light and dark mode with next-themes
-- **Minimalist Aesthetic** - Clean black and white design with pixel-perfect graphics
+- Self-playing animation - Watch the game play itself with intelligent paddle movement
+- Pixel art rendering - Custom pixel-based text rendering on canvas
+- Dynamic collisions - Real-time collision detection with visual feedback
+- Responsive design - Adapts seamlessly to different screen sizes and orientations
+- Smooth animations - 60 FPS animations using requestAnimationFrame
+- Theme support - Light and dark mode with next-themes
+- Minimalist aesthetic - Clean black and white design with pixel-perfect graphics
 
 ## Getting Started
 
