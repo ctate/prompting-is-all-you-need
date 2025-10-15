@@ -1,14 +1,22 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useTheme } from "next-themes"
 
-const COLOR = "#FFFFFF"
-const HIT_COLOR = "#333333"
-const BACKGROUND_COLOR = "#000000"
-const BALL_COLOR = "#FFFFFF"
-const PADDLE_COLOR = "#FFFFFF"
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
+
+// Theme-aware color getter
+const getColors = (theme: string | undefined) => {
+  const isDark = theme === 'dark'
+  return {
+    COLOR: isDark ? "#FFFFFF" : "#000000",
+    HIT_COLOR: isDark ? "#333333" : "#CCCCCC",
+    BACKGROUND_COLOR: isDark ? "#000000" : "#FFFFFF",
+    BALL_COLOR: isDark ? "#FFFFFF" : "#000000",
+    PADDLE_COLOR: isDark ? "#FFFFFF" : "#000000",
+  }
+}
 
 // Sound utility functions
 const createAudioContext = () => {
@@ -176,8 +184,10 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const { theme, resolvedTheme } = useTheme()
 
   useEffect(() => {
+    const currentTheme = resolvedTheme || theme
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -412,20 +422,22 @@ export function PromptingIsAllYouNeed() {
     const drawGame = () => {
       if (!ctx) return
 
-      ctx.fillStyle = BACKGROUND_COLOR
+      const colors = getColors(currentTheme)
+
+      ctx.fillStyle = colors.BACKGROUND_COLOR
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       pixelsRef.current.forEach((pixel) => {
-        ctx.fillStyle = pixel.hit ? HIT_COLOR : COLOR
+        ctx.fillStyle = pixel.hit ? colors.HIT_COLOR : colors.COLOR
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      ctx.fillStyle = BALL_COLOR
+      ctx.fillStyle = colors.BALL_COLOR
       ctx.beginPath()
       ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
       ctx.fill()
 
-      ctx.fillStyle = PADDLE_COLOR
+      ctx.fillStyle = colors.PADDLE_COLOR
       paddlesRef.current.forEach((paddle) => {
         ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
       })
@@ -444,7 +456,7 @@ export function PromptingIsAllYouNeed() {
     return () => {
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [])
+  }, [theme, resolvedTheme])
 
   return (
     <canvas
