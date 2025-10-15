@@ -15,9 +15,10 @@
 
 <p align="center">
   <a href="#about"><strong>About</strong></a> ·
-  <a href="#how-to-use"><strong>How to Use</strong></a> ·
-  <a href="#tech"><strong>Tech</strong></a> ·
   <a href="#features"><strong>Features</strong></a> ·
+  <a href="#getting-started"><strong>Getting Started</strong></a> ·
+  <a href="#how-to-use"><strong>How to Use</strong></a> ·
+  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
   <a href="#author"><strong>Author</strong></a>
 </p>
 <br/>
@@ -26,31 +27,109 @@
 
 Prompting Is All You Need is an interactive pixel-based pong game that features a self-playing animation where a ball bounces around the screen, hitting pixel text and paddles. The game showcases dynamic animations and responsive design, creating an engaging visual experience.
 
-## How to Use
-
-- Simply load the page to watch the animation play automatically
-- The ball will bounce around the screen, hitting the pixel text and paddles
-- The paddles will automatically track and follow the ball
-- The pixels change color when hit by the ball
-- Responsive design adapts to different screen sizes
-
-## Tech
-
-- React & Next.js
-- Canvas API for rendering
-- Dynamic animation with requestAnimationFrame
-- Responsive design that adapts to viewport size
-- Pixel-based text rendering
+This project demonstrates the power of modern web technologies combined with creative animation techniques to create a nostalgic yet modern gaming experience.
 
 ## Features
 
-- Self-playing pong game
-- Pixel text that reacts to ball collisions
-- Automatic paddle movement
-- Responsive design that works on all screen sizes
-- Smooth animations with collision detection
-- Minimalist black and white aesthetic
+- **Self-Playing Animation** - Watch the game play itself with intelligent paddle movement
+- **Pixel Art Rendering** - Custom pixel-based text rendering on canvas
+- **Dynamic Collisions** - Real-time collision detection with visual feedback
+- **Responsive Design** - Adapts seamlessly to different screen sizes and orientations
+- **Smooth Animations** - 60 FPS animations using requestAnimationFrame
+- **Theme Support** - Light and dark mode with next-themes
+- **Minimalist Aesthetic** - Clean black and white design with pixel-perfect graphics
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18.0 or higher
+- pnpm (recommended) or npm
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd prompting-is-all-you-need
+```
+
+2. Install dependencies:
+```bash
+pnpm install
+# or
+npm install
+```
+
+3. Run the development server:
+```bash
+pnpm dev
+# or
+npm run dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+
+### Available Scripts
+
+- `pnpm dev` - Start the development server
+- `pnpm build` - Build the production application
+- `pnpm start` - Start the production server
+- `pnpm lint` - Run ESLint to check code quality
+
+## How to Use
+
+- Simply load the page to watch the animation play automatically
+- The ball bounces around the screen, hitting the pixel text and paddles
+- Paddles automatically track and follow the ball with realistic physics
+- Pixels change color when hit by the ball, creating dynamic visual effects
+- Responsive design adapts to different screen sizes
+- Toggle between light and dark modes using the theme switcher
+
+## Tech Stack
+
+### Core Framework
+- **Next.js 15.2** - React framework for production
+- **React 19** - UI component library
+- **TypeScript** - Type-safe JavaScript
+
+### Styling & UI
+- **Tailwind CSS** - Utility-first CSS framework
+- **Radix UI** - Headless UI component library
+- **next-themes** - Theme management with dark mode support
+- **class-variance-authority** - CSS variant management
+- **lucide-react** - Icon library
+
+### Animation & Rendering
+- **Canvas API** - For pixel-perfect rendering and animations
+- **requestAnimationFrame** - Smooth 60 FPS animations
+
+### Additional Libraries
+- **React Hook Form** - Form state management
+- **Zod** - Schema validation
+- **date-fns** - Date utility library
+- **Sonner** - Toast notifications
+
+## Project Structure
+
+```
+.
+├── app/                 # Next.js app directory
+├── components/          # React components
+│   └── ui/             # Reusable UI components
+├── hooks/              # Custom React hooks
+├── lib/                # Utility functions
+├── public/             # Static assets
+├── styles/             # Global styles
+└── prompting.tsx       # Main pong game component
+```
 
 ## Author
 
-- Chris Tate ([@ctatedev](https://x.com/ctatedev))
+Created by Chris Tate ([@ctatedev](https://x.com/ctatedev))
+
+---
+
+<p align="center">
+  Made with React, Canvas API, and Next.js
+</p>
