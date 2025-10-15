@@ -176,15 +176,20 @@ export function PromptingIsAllYouNeed() {
   const { isMuted } = useMute()
   const isMutedRef = useRef(isMuted)
   const { theme, resolvedTheme } = useTheme()
+  const resolvedThemeRef = useRef(resolvedTheme)
 
-  // Keep ref in sync with state
+  // Keep refs in sync with state
   useEffect(() => {
     isMutedRef.current = isMuted
   }, [isMuted])
 
+  useEffect(() => {
+    resolvedThemeRef.current = resolvedTheme
+  }, [resolvedTheme])
+
   // Get theme-aware colors
   const getColors = () => {
-    const isDark = resolvedTheme === 'dark'
+    const isDark = resolvedThemeRef.current === 'dark'
     return {
       COLOR: isDark ? "#FFFFFF" : "#000000",
       HIT_COLOR: isDark ? "#333333" : "#CCCCCC",
