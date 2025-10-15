@@ -7,8 +7,21 @@ import { Volume2, VolumeX } from "lucide-react"
 const COLOR = "#FFFFFF"
 const HIT_COLOR = "#333333"
 const BACKGROUND_COLOR = "#000000"
-const BALL_COLOR = "#FFFFFF"
 const PADDLE_COLOR = "#FFFFFF"
+
+// Ball colors array for cycling
+const BALL_COLORS = [
+  "#FF6B6B", // Red
+  "#4ECDC4", // Teal
+  "#45B7D1", // Blue
+  "#96CEB4", // Green
+  "#FFEAA7", // Yellow
+  "#DDA0DD", // Plum
+  "#98D8C8", // Mint
+  "#F7DC6F", // Gold
+  "#BB8FCE", // Light Purple
+  "#85C1E9", // Light Blue
+]
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
 
@@ -160,6 +173,7 @@ interface Ball {
   dx: number
   dy: number
   radius: number
+  color: string
 }
 
 interface Paddle {
@@ -180,6 +194,8 @@ export function PromptingIsAllYouNeed() {
   const audioContextRef = useRef<AudioContext | null>(null)
   const [isMuted, setIsMuted] = useState(false)
   const isMutedRef = useRef(false)
+  const colorIndexRef = useRef(0)
+  const colorChangeTimerRef = useRef(0)
 
   // Update ref when state changes
   useEffect(() => {
@@ -303,6 +319,7 @@ export function PromptingIsAllYouNeed() {
         dx: -BALL_SPEED,
         dy: BALL_SPEED,
         radius: adjustedLargePixelSize / 2,
+        color: BALL_COLORS[0],
       }
 
       const paddleWidth = adjustedLargePixelSize
@@ -351,14 +368,28 @@ export function PromptingIsAllYouNeed() {
       ball.x += ball.dx
       ball.y += ball.dy
 
+      // Color change logic - change color every 2 seconds or on collision
+      colorChangeTimerRef.current += 1
+      if (colorChangeTimerRef.current >= 120) { // ~2 seconds at 60fps
+        colorIndexRef.current = (colorIndexRef.current + 1) % BALL_COLORS.length
+        ball.color = BALL_COLORS[colorIndexRef.current]
+        colorChangeTimerRef.current = 0
+      }
+
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
         playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
+        // Change color on wall collision
+        colorIndexRef.current = (colorIndexRef.current + 1) % BALL_COLORS.length
+        ball.color = BALL_COLORS[colorIndexRef.current]
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
         playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
+        // Change color on wall collision
+        colorIndexRef.current = (colorIndexRef.current + 1) % BALL_COLORS.length
+        ball.color = BALL_COLORS[colorIndexRef.current]
       }
 
       paddles.forEach((paddle) => {
@@ -371,6 +402,9 @@ export function PromptingIsAllYouNeed() {
           ) {
             ball.dx = -ball.dx
             playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
+            // Change color on paddle hit
+            colorIndexRef.current = (colorIndexRef.current + 1) % BALL_COLORS.length
+            ball.color = BALL_COLORS[colorIndexRef.current]
           }
         } else {
           if (
@@ -381,6 +415,9 @@ export function PromptingIsAllYouNeed() {
           ) {
             ball.dy = -ball.dy
             playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
+            // Change color on paddle hit
+            colorIndexRef.current = (colorIndexRef.current + 1) % BALL_COLORS.length
+            ball.color = BALL_COLORS[colorIndexRef.current]
           }
         }
       })
@@ -429,7 +466,7 @@ export function PromptingIsAllYouNeed() {
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      ctx.fillStyle = BALL_COLOR
+      ctx.fillStyle = ballRef.current.color
       ctx.beginPath()
       ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
       ctx.fill()
