@@ -466,7 +466,7 @@ export function PromptingIsAllYouNeed() {
       window.removeEventListener("resize", resizeCanvas)
       cancelAnimationFrame(animationFrameId)
     }
-  }, [resolvedTheme])
+  }, [])
 
   return (
     <canvas
