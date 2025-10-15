@@ -17,7 +17,7 @@ export function MuteToggle() {
 
   if (!mounted) {
     return (
-      <Button variant="outline" size="icon" className="fixed top-4 right-20 z-50">
+      <Button variant="outline" size="icon" className="fixed top-4 right-16 z-50 rounded-full backdrop-blur-md bg-background/80">
         <VolumeX className="h-[1.2rem] w-[1.2rem]" />
         <span className="sr-only">Toggle mute</span>
       </Button>
@@ -28,7 +28,7 @@ export function MuteToggle() {
     <Button
       variant="outline"
       size="icon"
-      className="fixed top-4 right-20 z-50"
+      className="fixed top-4 right-16 z-50 rounded-full backdrop-blur-md bg-background/80"
       onClick={() => setIsMuted(!isMuted)}
     >
       {isMuted ? (
