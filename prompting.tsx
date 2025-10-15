@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Button } from "./components/ui/button"
-import { Volume2, VolumeX } from "lucide-react"
+import { Volume2, VolumeX, Waves, Flame } from "lucide-react"
 
 const COLOR = "#FFFFFF"
 const HIT_COLOR = "#333333"
@@ -281,7 +281,7 @@ interface Paddle {
   isVertical: boolean
 }
 
-interface WaterParticle {
+interface Particle {
   x: number
   y: number
   vx: number
@@ -304,10 +304,11 @@ export function PromptingIsAllYouNeed() {
   const isMutedRef = useRef(true)
   const colorIndexRef = useRef(0)
   const colorChangeTimerRef = useRef(0)
-  const waterParticlesRef = useRef<WaterParticle[]>([])
-  const waterTimerRef = useRef(0)
+  const particlesRef = useRef<Particle[]>([])
+  const particleTimerRef = useRef(0)
   const songLoopRef = useRef<NodeJS.Timeout | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const [currentScene, setCurrentScene] = useState<'ocean' | 'fire'>('ocean')
 
   // Update ref when state changes
   useEffect(() => {
@@ -486,57 +487,86 @@ export function PromptingIsAllYouNeed() {
         },
       ]
 
-      // Initialize water particles
-      waterParticlesRef.current = []
-      waterTimerRef.current = 0
+      // Initialize particles
+      particlesRef.current = []
+      particleTimerRef.current = 0
     }
 
-    const createWaterParticle = (x: number, y: number) => {
-      const colors = ['#00BFFF', '#1E90FF', '#87CEEB', '#4682B4', '#5F9EA0', '#20B2AA', '#00CED1', '#40E0D0']
-      return {
-        x: x + (Math.random() - 0.5) * 30,
-        y: y + Math.random() * 20,
-        vx: (Math.random() - 0.5) * 1.5,
-        vy: Math.random() * 2 + 0.5, // Bubbles rise upward
-        life: 0,
-        maxLife: 80 + Math.random() * 60,
-        size: 1 + Math.random() * 3,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        waveOffset: Math.random() * Math.PI * 2
+    const createParticle = (x: number, y: number, scene: 'ocean' | 'fire') => {
+      if (scene === 'ocean') {
+        const colors = ['#00BFFF', '#1E90FF', '#87CEEB', '#4682B4', '#5F9EA0', '#20B2AA', '#00CED1', '#40E0D0']
+        return {
+          x: x + (Math.random() - 0.5) * 30,
+          y: y + Math.random() * 20,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: Math.random() * 2 + 0.5, // Bubbles rise upward
+          life: 0,
+          maxLife: 80 + Math.random() * 60,
+          size: 1 + Math.random() * 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          waveOffset: Math.random() * Math.PI * 2
+        }
+      } else {
+        const colors = ['#FF4500', '#FF6347', '#FF7F50', '#FFA500', '#FFD700', '#FF6B35', '#FF8C00']
+        return {
+          x: x + (Math.random() - 0.5) * 20,
+          y: y + Math.random() * 10,
+          vx: (Math.random() - 0.5) * 2,
+          vy: -Math.random() * 3 - 1, // Fire rises upward
+          life: 0,
+          maxLife: 60 + Math.random() * 40,
+          size: 2 + Math.random() * 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          waveOffset: Math.random() * Math.PI * 2
+        }
       }
     }
 
-    const updateWaterParticles = () => {
+    const updateParticles = () => {
       const canvas = canvasRef.current
       if (!canvas) return
 
-      // Add new water particles (bubbles)
-      waterTimerRef.current += 1
-      if (waterTimerRef.current >= 3) { // Add particles every 3 frames
-        const numParticles = 2 + Math.floor(Math.random() * 2)
+      // Add new particles
+      particleTimerRef.current += 1
+      const spawnRate = currentScene === 'ocean' ? 3 : 2
+      if (particleTimerRef.current >= spawnRate) {
+        const numParticles = currentScene === 'ocean' ? 2 + Math.floor(Math.random() * 2) : 3 + Math.floor(Math.random() * 3)
         for (let i = 0; i < numParticles; i++) {
-          waterParticlesRef.current.push(createWaterParticle(
+          particlesRef.current.push(createParticle(
             Math.random() * canvas.width,
-            canvas.height - 20 + Math.random() * 10
+            currentScene === 'ocean' ? canvas.height - 20 + Math.random() * 10 : canvas.height - 50 + Math.random() * 30,
+            currentScene
           ))
         }
-        waterTimerRef.current = 0
+        particleTimerRef.current = 0
       }
 
       // Update existing particles
-      waterParticlesRef.current = waterParticlesRef.current.filter(particle => {
-        // Wave-like horizontal movement
-        particle.waveOffset += 0.1
-        particle.x += particle.vx + Math.sin(particle.waveOffset) * 0.5
-        particle.y -= particle.vy // Bubbles rise upward
-        particle.life += 1
-        
-        // Gentle floating motion
-        particle.vx += (Math.random() - 0.5) * 0.1
-        particle.vx *= 0.98 // Water resistance
-        particle.size *= 0.995 // Very slow shrinking
-        
-        return particle.life < particle.maxLife && particle.size > 0.2 && particle.y > -10
+      particlesRef.current = particlesRef.current.filter(particle => {
+        if (currentScene === 'ocean') {
+          // Ocean particle behavior
+          particle.waveOffset += 0.1
+          particle.x += particle.vx + Math.sin(particle.waveOffset) * 0.5
+          particle.y -= particle.vy // Bubbles rise upward
+          particle.life += 1
+          
+          // Gentle floating motion
+          particle.vx += (Math.random() - 0.5) * 0.1
+          particle.vx *= 0.98 // Water resistance
+          particle.size *= 0.995 // Very slow shrinking
+          
+          return particle.life < particle.maxLife && particle.size > 0.2 && particle.y > -10
+        } else {
+          // Fire particle behavior
+          particle.x += particle.vx
+          particle.y += particle.vy
+          particle.life += 1
+          particle.vy += 0.05 // Gravity effect
+          particle.vx *= 0.99 // Air resistance
+          particle.size *= 0.98 // Shrink over time
+          
+          return particle.life < particle.maxLife && particle.size > 0.1
+        }
       })
     }
 
@@ -547,8 +577,8 @@ export function PromptingIsAllYouNeed() {
       ball.x += ball.dx
       ball.y += ball.dy
 
-      // Update water particles
-      updateWaterParticles()
+      // Update particles
+      updateParticles()
 
       // Color change logic - change color every 2 seconds or on collision
       colorChangeTimerRef.current += 1
@@ -640,21 +670,29 @@ export function PromptingIsAllYouNeed() {
     const drawGame = () => {
       if (!ctx) return
 
-      // Create ocean gradient background
+      // Create background gradient based on scene
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-      gradient.addColorStop(0, '#001122')
-      gradient.addColorStop(0.2, '#002244')
-      gradient.addColorStop(0.4, '#003366')
-      gradient.addColorStop(0.6, '#004488')
-      gradient.addColorStop(0.8, '#0055AA')
-      gradient.addColorStop(1, '#000011')
+      if (currentScene === 'ocean') {
+        gradient.addColorStop(0, '#001122')
+        gradient.addColorStop(0.2, '#002244')
+        gradient.addColorStop(0.4, '#003366')
+        gradient.addColorStop(0.6, '#004488')
+        gradient.addColorStop(0.8, '#0055AA')
+        gradient.addColorStop(1, '#000011')
+      } else {
+        gradient.addColorStop(0, '#000000')
+        gradient.addColorStop(0.3, '#1a0000')
+        gradient.addColorStop(0.6, '#330000')
+        gradient.addColorStop(0.8, '#660000')
+        gradient.addColorStop(1, '#000000')
+      }
       
       ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Draw water particles (bubbles)
-      waterParticlesRef.current.forEach(particle => {
-        const alpha = (1 - (particle.life / particle.maxLife)) * 0.7
+      // Draw particles based on scene
+      particlesRef.current.forEach(particle => {
+        const alpha = (1 - (particle.life / particle.maxLife)) * (currentScene === 'ocean' ? 0.7 : 1)
         ctx.save()
         ctx.globalAlpha = alpha
         ctx.fillStyle = particle.color
@@ -662,12 +700,14 @@ export function PromptingIsAllYouNeed() {
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
         ctx.fill()
         
-        // Add a subtle glow effect for bubbles
-        ctx.globalAlpha = alpha * 0.3
-        ctx.fillStyle = '#FFFFFF'
-        ctx.beginPath()
-        ctx.arc(particle.x - particle.size * 0.3, particle.y - particle.size * 0.3, particle.size * 0.3, 0, Math.PI * 2)
-        ctx.fill()
+        if (currentScene === 'ocean') {
+          // Add a subtle glow effect for bubbles
+          ctx.globalAlpha = alpha * 0.3
+          ctx.fillStyle = '#FFFFFF'
+          ctx.beginPath()
+          ctx.arc(particle.x - particle.size * 0.3, particle.y - particle.size * 0.3, particle.size * 0.3, 0, Math.PI * 2)
+          ctx.fill()
+        }
         ctx.restore()
       })
 
@@ -714,14 +754,24 @@ export function PromptingIsAllYouNeed() {
         className="fixed top-0 left-0 w-full h-full"
         aria-label="Prompting Is All You Need: Fullscreen Pong game with pixel text"
       />
-      <Button
-        onClick={() => setIsMuted(!isMuted)}
-        className="fixed top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white border border-white/20"
-        size="icon"
-        aria-label={isMuted ? "Unmute sound" : "Mute sound"}
-      >
-        {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-      </Button>
+      <div className="fixed top-4 right-4 z-10 flex gap-2">
+        <Button
+          onClick={() => setCurrentScene(currentScene === 'ocean' ? 'fire' : 'ocean')}
+          className="bg-black/50 hover:bg-black/70 text-white border border-white/20"
+          size="icon"
+          aria-label={`Switch to ${currentScene === 'ocean' ? 'fire' : 'ocean'} scene`}
+        >
+          {currentScene === 'ocean' ? <Flame className="h-4 w-4" /> : <Waves className="h-4 w-4" />}
+        </Button>
+        <Button
+          onClick={() => setIsMuted(!isMuted)}
+          className="bg-black/50 hover:bg-black/70 text-white border border-white/20"
+          size="icon"
+          aria-label={isMuted ? "Unmute sound" : "Mute sound"}
+        >
+          {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+        </Button>
+      </div>
     </div>
   )
 }
