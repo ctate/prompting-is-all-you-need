@@ -52,40 +52,100 @@ const playSound = (audioContext: AudioContext | null, frequency: number, duratio
   oscillator.stop(audioContext.currentTime + duration)
 }
 
-const createOceanSound = (audioContext: AudioContext | null, isMuted: boolean = false) => {
+const create8BitSong = (audioContext: AudioContext | null, isMuted: boolean = false) => {
   if (!audioContext || isMuted) return
 
-  // Create ocean wave sound using noise and filtering
-  const bufferSize = audioContext.sampleRate * 2 // 2 seconds
-  const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate)
-  const output = buffer.getChannelData(0)
+  // 8-bit song data - a fun chiptune melody
+  const melody = [
+    { note: 523.25, duration: 0.5 }, // C5
+    { note: 587.33, duration: 0.5 }, // D5
+    { note: 659.25, duration: 0.5 }, // E5
+    { note: 523.25, duration: 0.5 }, // C5
+    { note: 440.00, duration: 0.5 }, // A4
+    { note: 392.00, duration: 0.5 }, // G4
+    { note: 440.00, duration: 0.5 }, // A4
+    { note: 523.25, duration: 0.5 }, // C5
+    { note: 659.25, duration: 0.5 }, // E5
+    { note: 523.25, duration: 0.5 }, // C5
+    { note: 440.00, duration: 0.5 }, // A4
+    { note: 392.00, duration: 0.5 }, // G4
+    { note: 440.00, duration: 0.5 }, // A4
+    { note: 523.25, duration: 1.0 }, // C5
+    { note: 0, duration: 0.5 }, // Rest
+  ]
 
-  // Generate pink noise (ocean-like)
-  for (let i = 0; i < bufferSize; i++) {
-    output[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 0.5)
+  const bassLine = [
+    { note: 130.81, duration: 1.0 }, // C3
+    { note: 146.83, duration: 1.0 }, // D3
+    { note: 164.81, duration: 1.0 }, // E3
+    { note: 130.81, duration: 1.0 }, // C3
+    { note: 110.00, duration: 1.0 }, // A2
+    { note: 98.00, duration: 1.0 },  // G2
+    { note: 110.00, duration: 1.0 }, // A2
+    { note: 130.81, duration: 1.0 }, // C3
+  ]
+
+  const playMelody = () => {
+    if (isMuted) return
+    
+    melody.forEach((note, index) => {
+      if (note.note > 0) {
+        setTimeout(() => {
+          const oscillator = audioContext.createOscillator()
+          const gainNode = audioContext.createGain()
+          
+          oscillator.connect(gainNode)
+          gainNode.connect(audioContext.destination)
+          
+          oscillator.frequency.value = note.note
+          oscillator.type = 'square' // 8-bit sound
+          
+          gainNode.gain.setValueAtTime(0.1, audioContext.currentTime)
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + note.duration)
+          
+          oscillator.start(audioContext.currentTime)
+          oscillator.stop(audioContext.currentTime + note.duration)
+        }, index * 500) // 500ms per note
+      }
+    })
   }
 
-  const source = audioContext.createBufferSource()
-  const gainNode = audioContext.createGain()
-  const filter = audioContext.createBiquadFilter()
+  const playBass = () => {
+    if (isMuted) return
+    
+    bassLine.forEach((note, index) => {
+      setTimeout(() => {
+        const oscillator = audioContext.createOscillator()
+        const gainNode = audioContext.createGain()
+        
+        oscillator.connect(gainNode)
+        gainNode.connect(audioContext.destination)
+        
+        oscillator.frequency.value = note.note
+        oscillator.type = 'triangle' // Bass sound
+        
+        gainNode.gain.setValueAtTime(0.15, audioContext.currentTime)
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + note.duration)
+        
+        oscillator.start(audioContext.currentTime)
+        oscillator.stop(audioContext.currentTime + note.duration)
+      }, index * 1000) // 1 second per bass note
+    })
+  }
 
-  source.buffer = buffer
-  source.loop = true
+  // Start the song
+  playMelody()
+  playBass()
 
-  // Low-pass filter for ocean sound
-  filter.type = 'lowpass'
-  filter.frequency.value = 800
-  filter.Q.value = 1
+  // Loop the song every 8 seconds
+  const songLoop = setInterval(() => {
+    if (!isMuted) {
+      playMelody()
+      playBass()
+    }
+  }, 8000)
 
-  // Volume control
-  gainNode.gain.value = 0.1
-
-  source.connect(filter)
-  filter.connect(gainNode)
-  gainNode.connect(audioContext.destination)
-
-  source.start()
-  return { source, gainNode }
+  return { songLoop }
 }
 
 const PIXEL_MAP = {
@@ -246,17 +306,27 @@ export function PromptingIsAllYouNeed() {
   const colorChangeTimerRef = useRef(0)
   const waterParticlesRef = useRef<WaterParticle[]>([])
   const waterTimerRef = useRef(0)
-  const oceanSoundRef = useRef<AudioBufferSourceNode | null>(null)
-  const oceanGainRef = useRef<GainNode | null>(null)
+  const songLoopRef = useRef<NodeJS.Timeout | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
 
   // Update ref when state changes
   useEffect(() => {
     isMutedRef.current = isMuted
-    // Control ocean sound based on mute state
-    if (oceanGainRef.current) {
-      oceanGainRef.current.gain.value = isMuted ? 0 : 0.1
+    // Control 8-bit song based on mute state
+    if (isMuted) {
+      if (songLoopRef.current) {
+        clearInterval(songLoopRef.current)
+        songLoopRef.current = null
+      }
+      setIsPlaying(false)
+    } else if (!isPlaying && audioContextRef.current) {
+      const song = create8BitSong(audioContextRef.current, false)
+      if (song) {
+        songLoopRef.current = song.songLoop
+        setIsPlaying(true)
+      }
     }
-  }, [isMuted])
+  }, [isMuted, isPlaying])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -267,15 +337,6 @@ export function PromptingIsAllYouNeed() {
 
     // Initialize audio context
     audioContextRef.current = createAudioContext()
-    
-    // Start ocean sound
-    if (audioContextRef.current) {
-      const oceanSound = createOceanSound(audioContextRef.current, isMutedRef.current)
-      if (oceanSound) {
-        oceanSoundRef.current = oceanSound.source
-        oceanGainRef.current = oceanSound.gainNode
-      }
-    }
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -638,13 +699,10 @@ export function PromptingIsAllYouNeed() {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
-      // Stop ocean sound
-      if (oceanSoundRef.current) {
-        oceanSoundRef.current.stop()
-        oceanSoundRef.current = null
-      }
-      if (oceanGainRef.current) {
-        oceanGainRef.current = null
+      // Stop 8-bit song
+      if (songLoopRef.current) {
+        clearInterval(songLoopRef.current)
+        songLoopRef.current = null
       }
     }
   }, [])
