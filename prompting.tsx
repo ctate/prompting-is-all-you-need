@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { useTheme } from "next-themes"
+import { useMute } from "@/components/mute-provider"
 
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
@@ -14,8 +15,8 @@ const createAudioContext = () => {
   return null
 }
 
-const playSound = (audioContext: AudioContext | null, frequency: number, duration: number, type: OscillatorType = "sine") => {
-  if (!audioContext) return
+const playSound = (audioContext: AudioContext | null, frequency: number, duration: number, type: OscillatorType = "sine", isMuted: boolean = false) => {
+  if (!audioContext || isMuted) return
 
   const oscillator = audioContext.createOscillator()
   const gainNode = audioContext.createGain()
@@ -172,7 +173,14 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const { isMuted } = useMute()
+  const isMutedRef = useRef(isMuted)
   const { theme, resolvedTheme } = useTheme()
+
+  // Keep ref in sync with state
+  useEffect(() => {
+    isMutedRef.current = isMuted
+  }, [isMuted])
 
   // Get theme-aware colors
   const getColors = () => {
@@ -354,11 +362,11 @@ export function PromptingIsAllYouNeed() {
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
-        playSound(audioContextRef.current, 220, 0.1, "triangle") // Wall bounce sound
+        playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
-        playSound(audioContextRef.current, 220, 0.1, "triangle") // Wall bounce sound
+        playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
 
       paddles.forEach((paddle) => {
@@ -370,7 +378,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
-            playSound(audioContextRef.current, 330, 0.15, "square") // Paddle hit sound
+            playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         } else {
           if (
@@ -380,7 +388,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
-            playSound(audioContextRef.current, 330, 0.15, "square") // Paddle hit sound
+            playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         }
       })
@@ -406,7 +414,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
-          playSound(audioContextRef.current, 440, 0.08, "sine") // Pixel hit sound
+          playSound(audioContextRef.current, 440, 0.08, "sine", isMutedRef.current) // Pixel hit sound
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
           if (Math.abs(ball.x - centerX) > Math.abs(ball.y - centerY)) {
