@@ -1,6 +1,8 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
+import { Button } from "./components/ui/button"
+import { Volume2, VolumeX } from "lucide-react"
 
 const COLOR = "#FFFFFF"
 const HIT_COLOR = "#333333"
@@ -18,8 +20,8 @@ const createAudioContext = () => {
   return null
 }
 
-const playSound = (audioContext: AudioContext | null, frequency: number, duration: number, type: OscillatorType = "sine") => {
-  if (!audioContext) return
+const playSound = (audioContext: AudioContext | null, frequency: number, duration: number, type: OscillatorType = "sine", isMuted: boolean = false) => {
+  if (!audioContext || isMuted) return
 
   const oscillator = audioContext.createOscillator()
   const gainNode = audioContext.createGain()
@@ -176,6 +178,7 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const [isMuted, setIsMuted] = useState(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -345,11 +348,11 @@ export function PromptingIsAllYouNeed() {
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
-        playSound(audioContextRef.current, 220, 0.1, "triangle") // Wall bounce sound
+        playSound(audioContextRef.current, 220, 0.1, "triangle", isMuted) // Wall bounce sound
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
-        playSound(audioContextRef.current, 220, 0.1, "triangle") // Wall bounce sound
+        playSound(audioContextRef.current, 220, 0.1, "triangle", isMuted) // Wall bounce sound
       }
 
       paddles.forEach((paddle) => {
@@ -361,7 +364,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
-            playSound(audioContextRef.current, 330, 0.15, "square") // Paddle hit sound
+            playSound(audioContextRef.current, 330, 0.15, "square", isMuted) // Paddle hit sound
           }
         } else {
           if (
@@ -371,7 +374,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
-            playSound(audioContextRef.current, 330, 0.15, "square") // Paddle hit sound
+            playSound(audioContextRef.current, 330, 0.15, "square", isMuted) // Paddle hit sound
           }
         }
       })
@@ -397,7 +400,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
-          playSound(audioContextRef.current, 440, 0.08, "sine") // Pixel hit sound
+          playSound(audioContextRef.current, 440, 0.08, "sine", isMuted) // Pixel hit sound
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
           if (Math.abs(ball.x - centerX) > Math.abs(ball.y - centerY)) {
@@ -447,11 +450,21 @@ export function PromptingIsAllYouNeed() {
   }, [])
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full"
-      aria-label="Prompting Is All You Need: Fullscreen Pong game with pixel text"
-    />
+    <div className="relative w-full h-full">
+      <canvas
+        ref={canvasRef}
+        className="fixed top-0 left-0 w-full h-full"
+        aria-label="Prompting Is All You Need: Fullscreen Pong game with pixel text"
+      />
+      <Button
+        onClick={() => setIsMuted(!isMuted)}
+        className="fixed top-4 right-4 z-10 bg-black/50 hover:bg-black/70 text-white border border-white/20"
+        size="icon"
+        aria-label={isMuted ? "Unmute sound" : "Mute sound"}
+      >
+        {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+      </Button>
+    </div>
   )
 }
 
