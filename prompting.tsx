@@ -1,12 +1,24 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useTheme } from "next-themes"
 
-const COLOR = "#FFFFFF"
-const HIT_COLOR = "#333333"
-const BACKGROUND_COLOR = "#000000"
-const BALL_COLOR = "#FFFFFF"
-const PADDLE_COLOR = "#FFFFFF"
+// Color schemes for light and dark modes
+const DARK_COLORS = {
+  COLOR: "#FFFFFF",
+  HIT_COLOR: "#333333",
+  BACKGROUND_COLOR: "#000000",
+  BALL_COLOR: "#FFFFFF",
+  PADDLE_COLOR: "#FFFFFF",
+}
+
+const LIGHT_COLORS = {
+  COLOR: "#000000",
+  HIT_COLOR: "#CCCCCC",
+  BACKGROUND_COLOR: "#FFFFFF",
+  BALL_COLOR: "#000000",
+  PADDLE_COLOR: "#000000",
+}
 const LETTER_SPACING = 1
 const WORD_SPACING = 3
 
@@ -176,6 +188,10 @@ export function PromptingIsAllYouNeed() {
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
+  const { theme } = useTheme()
+  
+  // Get current color scheme based on theme
+  const colors = theme === "light" ? LIGHT_COLORS : DARK_COLORS
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -412,20 +428,20 @@ export function PromptingIsAllYouNeed() {
     const drawGame = () => {
       if (!ctx) return
 
-      ctx.fillStyle = BACKGROUND_COLOR
+      ctx.fillStyle = colors.BACKGROUND_COLOR
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       pixelsRef.current.forEach((pixel) => {
-        ctx.fillStyle = pixel.hit ? HIT_COLOR : COLOR
+        ctx.fillStyle = pixel.hit ? colors.HIT_COLOR : colors.COLOR
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      ctx.fillStyle = BALL_COLOR
+      ctx.fillStyle = colors.BALL_COLOR
       ctx.beginPath()
       ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
       ctx.fill()
 
-      ctx.fillStyle = PADDLE_COLOR
+      ctx.fillStyle = colors.PADDLE_COLOR
       paddlesRef.current.forEach((paddle) => {
         ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
       })
@@ -444,12 +460,44 @@ export function PromptingIsAllYouNeed() {
     return () => {
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [])
+  }, []) // Only run once on mount
+
+  // Separate effect for theme changes - only redraws without reinitializing
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    // Just redraw with new colors when theme changes
+    const redraw = () => {
+      ctx.fillStyle = colors.BACKGROUND_COLOR
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      pixelsRef.current.forEach((pixel) => {
+        ctx.fillStyle = pixel.hit ? colors.HIT_COLOR : colors.COLOR
+        ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
+      })
+
+      ctx.fillStyle = colors.BALL_COLOR
+      ctx.beginPath()
+      ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
+      ctx.fill()
+
+      ctx.fillStyle = colors.PADDLE_COLOR
+      paddlesRef.current.forEach((paddle) => {
+        ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height)
+      })
+    }
+
+    redraw()
+  }, [theme, colors]) // Only redraw when theme changes
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full"
+      className="fixed top-0 left-0 w-full h-full transition-colors duration-300"
       aria-label="Prompting Is All You Need: Fullscreen Pong game with pixel text"
     />
   )
