@@ -52,6 +52,42 @@ const playSound = (audioContext: AudioContext | null, frequency: number, duratio
   oscillator.stop(audioContext.currentTime + duration)
 }
 
+const createOceanSound = (audioContext: AudioContext | null, isMuted: boolean = false) => {
+  if (!audioContext || isMuted) return
+
+  // Create ocean wave sound using noise and filtering
+  const bufferSize = audioContext.sampleRate * 2 // 2 seconds
+  const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate)
+  const output = buffer.getChannelData(0)
+
+  // Generate pink noise (ocean-like)
+  for (let i = 0; i < bufferSize; i++) {
+    output[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 0.5)
+  }
+
+  const source = audioContext.createBufferSource()
+  const gainNode = audioContext.createGain()
+  const filter = audioContext.createBiquadFilter()
+
+  source.buffer = buffer
+  source.loop = true
+
+  // Low-pass filter for ocean sound
+  filter.type = 'lowpass'
+  filter.frequency.value = 800
+  filter.Q.value = 1
+
+  // Volume control
+  gainNode.gain.value = 0.1
+
+  source.connect(filter)
+  filter.connect(gainNode)
+  gainNode.connect(audioContext.destination)
+
+  source.start()
+  return { source, gainNode }
+}
+
 const PIXEL_MAP = {
   P: [
     [1, 1, 1, 1],
@@ -210,10 +246,16 @@ export function PromptingIsAllYouNeed() {
   const colorChangeTimerRef = useRef(0)
   const waterParticlesRef = useRef<WaterParticle[]>([])
   const waterTimerRef = useRef(0)
+  const oceanSoundRef = useRef<AudioBufferSourceNode | null>(null)
+  const oceanGainRef = useRef<GainNode | null>(null)
 
   // Update ref when state changes
   useEffect(() => {
     isMutedRef.current = isMuted
+    // Control ocean sound based on mute state
+    if (oceanGainRef.current) {
+      oceanGainRef.current.gain.value = isMuted ? 0 : 0.1
+    }
   }, [isMuted])
 
   useEffect(() => {
@@ -225,6 +267,15 @@ export function PromptingIsAllYouNeed() {
 
     // Initialize audio context
     audioContextRef.current = createAudioContext()
+    
+    // Start ocean sound
+    if (audioContextRef.current) {
+      const oceanSound = createOceanSound(audioContextRef.current, isMutedRef.current)
+      if (oceanSound) {
+        oceanSoundRef.current = oceanSound.source
+        oceanGainRef.current = oceanSound.gainNode
+      }
+    }
 
     const resizeCanvas = () => {
       canvas.width = window.innerWidth
@@ -587,6 +638,14 @@ export function PromptingIsAllYouNeed() {
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
+      // Stop ocean sound
+      if (oceanSoundRef.current) {
+        oceanSoundRef.current.stop()
+        oceanSoundRef.current = null
+      }
+      if (oceanGainRef.current) {
+        oceanGainRef.current = null
+      }
     }
   }, [])
 
