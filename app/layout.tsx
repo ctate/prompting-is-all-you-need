@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
+import { MuteProvider } from '@/components/mute-provider'
 
 export const metadata: Metadata = {
   title: 'v0 App',
@@ -22,7 +23,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <MuteProvider>
+            {children}
+          </MuteProvider>
         </ThemeProvider>
       </body>
     </html>
