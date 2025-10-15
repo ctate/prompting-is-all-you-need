@@ -329,6 +329,12 @@ export function PromptingIsAllYouNeed() {
     }
   }, [isMuted, isPlaying])
 
+  // Clear particles when scene changes
+  useEffect(() => {
+    particlesRef.current = []
+    particleTimerRef.current = 0
+  }, [currentScene])
+
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -522,20 +528,20 @@ export function PromptingIsAllYouNeed() {
       }
     }
 
-    const updateParticles = () => {
+    const updateParticles = (scene: 'ocean' | 'fire') => {
       const canvas = canvasRef.current
       if (!canvas) return
 
       // Add new particles
       particleTimerRef.current += 1
-      const spawnRate = currentScene === 'ocean' ? 3 : 2
+      const spawnRate = scene === 'ocean' ? 3 : 2
       if (particleTimerRef.current >= spawnRate) {
-        const numParticles = currentScene === 'ocean' ? 2 + Math.floor(Math.random() * 2) : 3 + Math.floor(Math.random() * 3)
+        const numParticles = scene === 'ocean' ? 2 + Math.floor(Math.random() * 2) : 3 + Math.floor(Math.random() * 3)
         for (let i = 0; i < numParticles; i++) {
           particlesRef.current.push(createParticle(
             Math.random() * canvas.width,
-            currentScene === 'ocean' ? canvas.height - 20 + Math.random() * 10 : canvas.height - 50 + Math.random() * 30,
-            currentScene
+            scene === 'ocean' ? canvas.height - 20 + Math.random() * 10 : canvas.height - 50 + Math.random() * 30,
+            scene
           ))
         }
         particleTimerRef.current = 0
@@ -543,7 +549,7 @@ export function PromptingIsAllYouNeed() {
 
       // Update existing particles
       particlesRef.current = particlesRef.current.filter(particle => {
-        if (currentScene === 'ocean') {
+        if (scene === 'ocean') {
           // Ocean particle behavior
           particle.waveOffset += 0.1
           particle.x += particle.vx + Math.sin(particle.waveOffset) * 0.5
@@ -578,7 +584,7 @@ export function PromptingIsAllYouNeed() {
       ball.y += ball.dy
 
       // Update particles
-      updateParticles()
+      updateParticles(currentScene)
 
       // Color change logic - change color every 2 seconds or on collision
       colorChangeTimerRef.current += 1
