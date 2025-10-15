@@ -185,7 +185,7 @@ interface Paddle {
   isVertical: boolean
 }
 
-interface FireParticle {
+interface WaterParticle {
   x: number
   y: number
   vx: number
@@ -194,6 +194,7 @@ interface FireParticle {
   maxLife: number
   size: number
   color: string
+  waveOffset: number
 }
 
 export function PromptingIsAllYouNeed() {
@@ -207,8 +208,8 @@ export function PromptingIsAllYouNeed() {
   const isMutedRef = useRef(true)
   const colorIndexRef = useRef(0)
   const colorChangeTimerRef = useRef(0)
-  const fireParticlesRef = useRef<FireParticle[]>([])
-  const fireTimerRef = useRef(0)
+  const waterParticlesRef = useRef<WaterParticle[]>([])
+  const waterTimerRef = useRef(0)
 
   // Update ref when state changes
   useEffect(() => {
@@ -373,52 +374,57 @@ export function PromptingIsAllYouNeed() {
         },
       ]
 
-      // Initialize fire particles
-      fireParticlesRef.current = []
-      fireTimerRef.current = 0
+      // Initialize water particles
+      waterParticlesRef.current = []
+      waterTimerRef.current = 0
     }
 
-    const createFireParticle = (x: number, y: number) => {
-      const colors = ['#FF4500', '#FF6347', '#FF7F50', '#FFA500', '#FFD700', '#FF6B35', '#FF8C00']
+    const createWaterParticle = (x: number, y: number) => {
+      const colors = ['#00BFFF', '#1E90FF', '#87CEEB', '#4682B4', '#5F9EA0', '#20B2AA', '#00CED1', '#40E0D0']
       return {
-        x: x + (Math.random() - 0.5) * 20,
-        y: y + Math.random() * 10,
-        vx: (Math.random() - 0.5) * 2,
-        vy: -Math.random() * 3 - 1,
+        x: x + (Math.random() - 0.5) * 30,
+        y: y + Math.random() * 20,
+        vx: (Math.random() - 0.5) * 1.5,
+        vy: Math.random() * 2 + 0.5, // Bubbles rise upward
         life: 0,
-        maxLife: 60 + Math.random() * 40,
-        size: 2 + Math.random() * 4,
-        color: colors[Math.floor(Math.random() * colors.length)]
+        maxLife: 80 + Math.random() * 60,
+        size: 1 + Math.random() * 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        waveOffset: Math.random() * Math.PI * 2
       }
     }
 
-    const updateFireParticles = () => {
+    const updateWaterParticles = () => {
       const canvas = canvasRef.current
       if (!canvas) return
 
-      // Add new fire particles
-      fireTimerRef.current += 1
-      if (fireTimerRef.current >= 2) { // Add particles every 2 frames
-        const numParticles = 3 + Math.floor(Math.random() * 3)
+      // Add new water particles (bubbles)
+      waterTimerRef.current += 1
+      if (waterTimerRef.current >= 3) { // Add particles every 3 frames
+        const numParticles = 2 + Math.floor(Math.random() * 2)
         for (let i = 0; i < numParticles; i++) {
-          fireParticlesRef.current.push(createFireParticle(
+          waterParticlesRef.current.push(createWaterParticle(
             Math.random() * canvas.width,
-            canvas.height - 50 + Math.random() * 30
+            canvas.height - 20 + Math.random() * 10
           ))
         }
-        fireTimerRef.current = 0
+        waterTimerRef.current = 0
       }
 
       // Update existing particles
-      fireParticlesRef.current = fireParticlesRef.current.filter(particle => {
-        particle.x += particle.vx
-        particle.y += particle.vy
+      waterParticlesRef.current = waterParticlesRef.current.filter(particle => {
+        // Wave-like horizontal movement
+        particle.waveOffset += 0.1
+        particle.x += particle.vx + Math.sin(particle.waveOffset) * 0.5
+        particle.y -= particle.vy // Bubbles rise upward
         particle.life += 1
-        particle.vy += 0.05 // Gravity effect
-        particle.vx *= 0.99 // Air resistance
-        particle.size *= 0.98 // Shrink over time
         
-        return particle.life < particle.maxLife && particle.size > 0.1
+        // Gentle floating motion
+        particle.vx += (Math.random() - 0.5) * 0.1
+        particle.vx *= 0.98 // Water resistance
+        particle.size *= 0.995 // Very slow shrinking
+        
+        return particle.life < particle.maxLife && particle.size > 0.2 && particle.y > -10
       })
     }
 
@@ -429,8 +435,8 @@ export function PromptingIsAllYouNeed() {
       ball.x += ball.dx
       ball.y += ball.dy
 
-      // Update fire particles
-      updateFireParticles()
+      // Update water particles
+      updateWaterParticles()
 
       // Color change logic - change color every 2 seconds or on collision
       colorChangeTimerRef.current += 1
@@ -522,25 +528,33 @@ export function PromptingIsAllYouNeed() {
     const drawGame = () => {
       if (!ctx) return
 
-      // Create fire gradient background
+      // Create ocean gradient background
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-      gradient.addColorStop(0, '#000000')
-      gradient.addColorStop(0.3, '#1a0000')
-      gradient.addColorStop(0.6, '#330000')
-      gradient.addColorStop(0.8, '#660000')
-      gradient.addColorStop(1, '#000000')
+      gradient.addColorStop(0, '#001122')
+      gradient.addColorStop(0.2, '#002244')
+      gradient.addColorStop(0.4, '#003366')
+      gradient.addColorStop(0.6, '#004488')
+      gradient.addColorStop(0.8, '#0055AA')
+      gradient.addColorStop(1, '#000011')
       
       ctx.fillStyle = gradient
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-      // Draw fire particles
-      fireParticlesRef.current.forEach(particle => {
-        const alpha = 1 - (particle.life / particle.maxLife)
+      // Draw water particles (bubbles)
+      waterParticlesRef.current.forEach(particle => {
+        const alpha = (1 - (particle.life / particle.maxLife)) * 0.7
         ctx.save()
         ctx.globalAlpha = alpha
         ctx.fillStyle = particle.color
         ctx.beginPath()
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
+        ctx.fill()
+        
+        // Add a subtle glow effect for bubbles
+        ctx.globalAlpha = alpha * 0.3
+        ctx.fillStyle = '#FFFFFF'
+        ctx.beginPath()
+        ctx.arc(particle.x - particle.size * 0.3, particle.y - particle.size * 0.3, particle.size * 0.3, 0, Math.PI * 2)
         ctx.fill()
         ctx.restore()
       })
