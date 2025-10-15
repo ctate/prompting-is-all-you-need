@@ -179,6 +179,12 @@ export function PromptingIsAllYouNeed() {
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
   const [isMuted, setIsMuted] = useState(false)
+  const isMutedRef = useRef(false)
+
+  // Update ref when state changes
+  useEffect(() => {
+    isMutedRef.current = isMuted
+  }, [isMuted])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -348,11 +354,11 @@ export function PromptingIsAllYouNeed() {
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
-        playSound(audioContextRef.current, 220, 0.1, "triangle", isMuted) // Wall bounce sound
+        playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
-        playSound(audioContextRef.current, 220, 0.1, "triangle", isMuted) // Wall bounce sound
+        playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
 
       paddles.forEach((paddle) => {
@@ -364,7 +370,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
-            playSound(audioContextRef.current, 330, 0.15, "square", isMuted) // Paddle hit sound
+            playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         } else {
           if (
@@ -374,7 +380,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
-            playSound(audioContextRef.current, 330, 0.15, "square", isMuted) // Paddle hit sound
+            playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         }
       })
@@ -400,7 +406,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
-          playSound(audioContextRef.current, 440, 0.08, "sine", isMuted) // Pixel hit sound
+          playSound(audioContextRef.current, 440, 0.08, "sine", isMutedRef.current) // Pixel hit sound
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
           if (Math.abs(ball.x - centerX) > Math.abs(ball.y - centerY)) {
