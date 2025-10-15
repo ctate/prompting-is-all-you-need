@@ -209,11 +209,53 @@ export function PromptingIsAllYouNeed() {
     // Initialize audio context
     audioContextRef.current = createAudioContext()
 
+    // Track old dimensions for scaling
+    let oldWidth = window.innerWidth
+    let oldHeight = window.innerHeight
+
     const resizeCanvas = () => {
+      const scaleX = window.innerWidth / oldWidth
+      const scaleY = window.innerHeight / oldHeight
+
+      // Update canvas dimensions
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
+      
+      const oldScale = scaleRef.current
       scaleRef.current = Math.min(canvas.width / 1000, canvas.height / 1000)
-      initializeGame()
+      const scaleRatio = scaleRef.current / oldScale
+
+      // If this is the first initialization (no pixels yet), initialize the game
+      if (pixelsRef.current.length === 0) {
+        initializeGame()
+      } else {
+        // Scale existing game elements
+        pixelsRef.current.forEach((pixel) => {
+          pixel.x *= scaleX
+          pixel.y *= scaleY
+          pixel.size *= scaleRatio
+        })
+
+        // Scale ball
+        const ball = ballRef.current
+        ball.x *= scaleX
+        ball.y *= scaleY
+        ball.dx *= scaleRatio
+        ball.dy *= scaleRatio
+        ball.radius *= scaleRatio
+
+        // Scale paddles
+        paddlesRef.current.forEach((paddle) => {
+          paddle.x *= scaleX
+          paddle.y *= scaleY
+          paddle.width *= (paddle.isVertical ? scaleRatio : scaleX)
+          paddle.height *= (paddle.isVertical ? scaleY : scaleRatio)
+          paddle.targetY *= (paddle.isVertical ? scaleY : scaleX)
+        })
+      }
+
+      oldWidth = window.innerWidth
+      oldHeight = window.innerHeight
     }
 
     const initializeGame = () => {
