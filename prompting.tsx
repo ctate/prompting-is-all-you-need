@@ -155,6 +155,7 @@ interface Ball {
   dx: number
   dy: number
   radius: number
+  colorIndex: number
 }
 
 interface Paddle {
@@ -169,7 +170,7 @@ interface Paddle {
 export function PromptingIsAllYouNeed() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pixelsRef = useRef<Pixel[]>([])
-  const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0 })
+  const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0, colorIndex: 0 })
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
@@ -187,6 +188,20 @@ export function PromptingIsAllYouNeed() {
     resolvedThemeRef.current = resolvedTheme
   }, [resolvedTheme])
 
+  // Ball color palette
+  const BALL_COLORS = [
+    "#FF6B6B", // Red
+    "#4ECDC4", // Teal
+    "#45B7D1", // Blue
+    "#96CEB4", // Green
+    "#FFEAA7", // Yellow
+    "#DDA0DD", // Plum
+    "#98D8C8", // Mint
+    "#F7DC6F", // Gold
+    "#BB8FCE", // Lavender
+    "#85C1E9", // Light Blue
+  ]
+
   // Get theme-aware colors
   const getColors = () => {
     const isDark = resolvedThemeRef.current === 'dark'
@@ -194,7 +209,7 @@ export function PromptingIsAllYouNeed() {
       COLOR: isDark ? "#FFFFFF" : "#000000",
       HIT_COLOR: isDark ? "#333333" : "#CCCCCC",
       BACKGROUND_COLOR: isDark ? "#000000" : "#FFFFFF",
-      BALL_COLOR: isDark ? "#FFFFFF" : "#000000",
+      BALL_COLOR: BALL_COLORS[ballRef.current.colorIndex],
       PADDLE_COLOR: isDark ? "#FFFFFF" : "#000000",
     }
   }
@@ -383,6 +398,7 @@ export function PromptingIsAllYouNeed() {
         dx: -BALL_SPEED,
         dy: BALL_SPEED,
         radius: adjustedLargePixelSize / 2,
+        colorIndex: 0,
       }
 
       const paddleWidth = adjustedLargePixelSize
@@ -431,13 +447,20 @@ export function PromptingIsAllYouNeed() {
       ball.x += ball.dx
       ball.y += ball.dy
 
-      // Wall collision detection with sound
+      // Cycle ball color over time (every 60 frames ≈ 1 second at 60fps)
+      if (Math.floor(Date.now() / 1000) % 2 === 0) {
+        ball.colorIndex = (ball.colorIndex + 1) % BALL_COLORS.length
+      }
+
+      // Wall collision detection with sound and color change
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
+        ball.colorIndex = (ball.colorIndex + 1) % BALL_COLORS.length
         playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
+        ball.colorIndex = (ball.colorIndex + 1) % BALL_COLORS.length
         playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
 
@@ -450,6 +473,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
+            ball.colorIndex = (ball.colorIndex + 1) % BALL_COLORS.length
             playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         } else {
@@ -460,6 +484,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
+            ball.colorIndex = (ball.colorIndex + 1) % BALL_COLORS.length
             playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         }
@@ -486,6 +511,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
+          ball.colorIndex = (ball.colorIndex + 1) % BALL_COLORS.length
           playSound(audioContextRef.current, 440, 0.08, "sine", isMutedRef.current) // Pixel hit sound
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
