@@ -177,6 +177,7 @@ export function PromptingIsAllYouNeed() {
   const isMutedRef = useRef(isMuted)
   const { theme, resolvedTheme } = useTheme()
   const resolvedThemeRef = useRef(resolvedTheme)
+  const hueRef = useRef(0)
 
   // Keep refs in sync with state
   useEffect(() => {
@@ -190,11 +191,13 @@ export function PromptingIsAllYouNeed() {
   // Get theme-aware colors
   const getColors = () => {
     const isDark = resolvedThemeRef.current === 'dark'
+    // Create a rainbow color for the ball using HSL
+    const ballColor = `hsl(${hueRef.current}, 100%, 50%)`
     return {
       COLOR: isDark ? "#FFFFFF" : "#000000",
       HIT_COLOR: isDark ? "#333333" : "#CCCCCC",
       BACKGROUND_COLOR: isDark ? "#000000" : "#FFFFFF",
-      BALL_COLOR: isDark ? "#FFFFFF" : "#000000",
+      BALL_COLOR: ballColor,
       PADDLE_COLOR: isDark ? "#FFFFFF" : "#000000",
     }
   }
@@ -430,6 +433,9 @@ export function PromptingIsAllYouNeed() {
 
       ball.x += ball.dx
       ball.y += ball.dy
+
+      // Update hue for color cycling (0-360 degrees)
+      hueRef.current = (hueRef.current + 2) % 360
 
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
