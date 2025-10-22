@@ -155,6 +155,7 @@ interface Ball {
   dx: number
   dy: number
   radius: number
+  hue: number
 }
 
 interface Paddle {
@@ -169,7 +170,7 @@ interface Paddle {
 export function PromptingIsAllYouNeed() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pixelsRef = useRef<Pixel[]>([])
-  const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0 })
+  const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0, hue: 0 })
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
@@ -383,6 +384,7 @@ export function PromptingIsAllYouNeed() {
         dx: -BALL_SPEED,
         dy: BALL_SPEED,
         radius: adjustedLargePixelSize / 2,
+        hue: 0,
       }
 
       const paddleWidth = adjustedLargePixelSize
@@ -430,6 +432,9 @@ export function PromptingIsAllYouNeed() {
 
       ball.x += ball.dx
       ball.y += ball.dy
+
+      // Update ball color (cycle through hue values 0-360)
+      ball.hue = (ball.hue + 2) % 360
 
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
@@ -511,7 +516,8 @@ export function PromptingIsAllYouNeed() {
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      ctx.fillStyle = colors.BALL_COLOR
+      // Use HSL color for rainbow effect
+      ctx.fillStyle = `hsl(${ballRef.current.hue}, 100%, 50%)`
       ctx.beginPath()
       ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
       ctx.fill()
