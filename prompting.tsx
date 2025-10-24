@@ -34,6 +34,23 @@ const playSound = (audioContext: AudioContext | null, frequency: number, duratio
   oscillator.stop(audioContext.currentTime + duration)
 }
 
+// Generate random color
+const getRandomColor = () => {
+  const colors = [
+    "#FF0000", // Red
+    "#FF6B00", // Orange
+    "#FFD700", // Gold
+    "#00FF00", // Green
+    "#00FFFF", // Cyan
+    "#0080FF", // Blue
+    "#8000FF", // Purple
+    "#FF00FF", // Magenta
+    "#FF1493", // Deep Pink
+    "#00FF80", // Spring Green
+  ]
+  return colors[Math.floor(Math.random() * colors.length)]
+}
+
 const PIXEL_MAP = {
   P: [
     [1, 1, 1, 1],
@@ -155,6 +172,7 @@ interface Ball {
   dx: number
   dy: number
   radius: number
+  color: string
 }
 
 interface Paddle {
@@ -169,7 +187,7 @@ interface Paddle {
 export function PromptingIsAllYouNeed() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pixelsRef = useRef<Pixel[]>([])
-  const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0 })
+  const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0, color: "#FF0000" })
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
@@ -383,6 +401,7 @@ export function PromptingIsAllYouNeed() {
         dx: -BALL_SPEED,
         dy: BALL_SPEED,
         radius: adjustedLargePixelSize / 2,
+        color: getRandomColor(),
       }
 
       const paddleWidth = adjustedLargePixelSize
@@ -434,10 +453,12 @@ export function PromptingIsAllYouNeed() {
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
         ball.dy = -ball.dy
+        ball.color = getRandomColor()
         playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
       if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
         ball.dx = -ball.dx
+        ball.color = getRandomColor()
         playSound(audioContextRef.current, 220, 0.1, "triangle", isMutedRef.current) // Wall bounce sound
       }
 
@@ -450,6 +471,7 @@ export function PromptingIsAllYouNeed() {
             ball.y < paddle.y + paddle.height
           ) {
             ball.dx = -ball.dx
+            ball.color = getRandomColor()
             playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         } else {
@@ -460,6 +482,7 @@ export function PromptingIsAllYouNeed() {
             ball.x < paddle.x + paddle.width
           ) {
             ball.dy = -ball.dy
+            ball.color = getRandomColor()
             playSound(audioContextRef.current, 330, 0.15, "square", isMutedRef.current) // Paddle hit sound
           }
         }
@@ -486,6 +509,7 @@ export function PromptingIsAllYouNeed() {
           ball.y - ball.radius < pixel.y + pixel.size
         ) {
           pixel.hit = true
+          ball.color = getRandomColor()
           playSound(audioContextRef.current, 440, 0.08, "sine", isMutedRef.current) // Pixel hit sound
           const centerX = pixel.x + pixel.size / 2
           const centerY = pixel.y + pixel.size / 2
@@ -511,7 +535,7 @@ export function PromptingIsAllYouNeed() {
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      ctx.fillStyle = colors.BALL_COLOR
+      ctx.fillStyle = ballRef.current.color
       ctx.beginPath()
       ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
       ctx.fill()
