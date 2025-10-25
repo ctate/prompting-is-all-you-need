@@ -511,7 +511,12 @@ export function PromptingIsAllYouNeed() {
         ctx.fillRect(pixel.x, pixel.y, pixel.size, pixel.size)
       })
 
-      ctx.fillStyle = colors.BALL_COLOR
+      const isDark = resolvedThemeRef.current === "dark"
+      const hue = (performance.now() / 10) % 360
+      const saturation = isDark ? 70 : 60
+      const lightness = isDark ? 60 : 45
+
+      ctx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`
       ctx.beginPath()
       ctx.arc(ballRef.current.x, ballRef.current.y, ballRef.current.radius, 0, Math.PI * 2)
       ctx.fill()
