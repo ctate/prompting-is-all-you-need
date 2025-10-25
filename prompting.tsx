@@ -170,6 +170,7 @@ export function PromptingIsAllYouNeed() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pixelsRef = useRef<Pixel[]>([])
   const ballRef = useRef<Ball>({ x: 0, y: 0, dx: 0, dy: 0, radius: 0 })
+  const ballHueRef = useRef(0)
   const paddlesRef = useRef<Paddle[]>([])
   const scaleRef = useRef(1)
   const audioContextRef = useRef<AudioContext | null>(null)
@@ -194,7 +195,7 @@ export function PromptingIsAllYouNeed() {
       COLOR: isDark ? "#FFFFFF" : "#000000",
       HIT_COLOR: isDark ? "#333333" : "#CCCCCC",
       BACKGROUND_COLOR: isDark ? "#000000" : "#FFFFFF",
-      BALL_COLOR: isDark ? "#FFFFFF" : "#000000",
+      BALL_COLOR: `hsl(${ballHueRef.current}, 100%, ${isDark ? 70 : 40}%)`,
       PADDLE_COLOR: isDark ? "#FFFFFF" : "#000000",
     }
   }
@@ -430,6 +431,7 @@ export function PromptingIsAllYouNeed() {
 
       ball.x += ball.dx
       ball.y += ball.dy
+      ballHueRef.current = (ballHueRef.current + 1) % 360
 
       // Wall collision detection with sound
       if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
